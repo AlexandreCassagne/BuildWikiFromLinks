@@ -11,6 +11,8 @@
 		ACEC7F911D0EDAC400379B25 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = ACEC7F901D0EDAC400379B25 /* ViewController.swift */; };
 		ACEC7F931D0EDAC400379B25 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = ACEC7F921D0EDAC400379B25 /* Assets.xcassets */; };
 		ACEC7F961D0EDAC400379B25 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = ACEC7F941D0EDAC400379B25 /* Main.storyboard */; };
+		ACEC7FA01D0EF86A00379B25 /* SwiftyJSON.swift in Sources */ = {isa = PBXBuildFile; fileRef = ACEC7F9F1D0EF86A00379B25 /* SwiftyJSON.swift */; };
+		ACEC7FA41D0FFCD500379B25 /* WikiArticle.swift in Sources */ = {isa = PBXBuildFile; fileRef = ACEC7FA31D0FFCD500379B25 /* WikiArticle.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -20,6 +22,8 @@
 		ACEC7F921D0EDAC400379B25 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		ACEC7F951D0EDAC400379B25 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		ACEC7F971D0EDAC400379B25 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		ACEC7F9F1D0EF86A00379B25 /* SwiftyJSON.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SwiftyJSON.swift; sourceTree = "<group>"; };
+		ACEC7FA31D0FFCD500379B25 /* WikiArticle.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WikiArticle.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -52,8 +56,10 @@
 		ACEC7F8D1D0EDAC400379B25 /* BuildWikiFromLinks */ = {
 			isa = PBXGroup;
 			children = (
+				ACEC7F9F1D0EF86A00379B25 /* SwiftyJSON.swift */,
 				ACEC7F8E1D0EDAC400379B25 /* AppDelegate.swift */,
 				ACEC7F901D0EDAC400379B25 /* ViewController.swift */,
+				ACEC7FA31D0FFCD500379B25 /* WikiArticle.swift */,
 				ACEC7F921D0EDAC400379B25 /* Assets.xcassets */,
 				ACEC7F941D0EDAC400379B25 /* Main.storyboard */,
 				ACEC7F971D0EDAC400379B25 /* Info.plist */,
@@ -132,7 +138,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				ACEC7F911D0EDAC400379B25 /* ViewController.swift in Sources */,
+				ACEC7FA41D0FFCD500379B25 /* WikiArticle.swift in Sources */,
 				ACEC7F8F1D0EDAC400379B25 /* AppDelegate.swift in Sources */,
+				ACEC7FA01D0EF86A00379B25 /* SwiftyJSON.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -275,6 +283,7 @@
 				ACEC7F9C1D0EDAC400379B25 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
