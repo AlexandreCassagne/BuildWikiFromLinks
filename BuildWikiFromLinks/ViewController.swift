@@ -65,6 +65,8 @@ class ViewController: NSViewController, NSTableViewDataSource, NSTableViewDelega
 		text.enumerateLines { (line, stop) in
 			urls.insert(line)
 		}
+		
+		print(urls.count)
 		/*
 		text.enumerateLines { (line, stop) in
 			self.count = self.count + 1
@@ -138,11 +140,10 @@ class ViewController: NSViewController, NSTableViewDataSource, NSTableViewDelega
 			})
 		}
 		let oq = NSOperationQueue()
-		oq.qualityOfService = .Background
+		oq.qualityOfService = .Utility
 		oq.addOperation(workOperation)
 		
-		
-		//		queue.waitUntilAllOperationsAreFinished()
+		oq.waitUntilAllOperationsAreFinished()
 		
 		fieldEditor.string = ""
 		return true
