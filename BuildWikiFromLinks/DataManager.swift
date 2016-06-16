@@ -24,8 +24,18 @@ class DataManager {
 	
 	weak var delegate: DataManagerDelegate?
 	
-	func lookup(article: WikiArticle, inLanguage: WikiArticle.Language) {
-		
+	func lookup(url: String) -> WikiArticle? {
+		let matches = self.articles.filter { (article) -> Bool in
+			return article.pageURL.absoluteString == url
+		}
+		assert(matches.count < 2)
+		if let match = matches.first { return match }
+		else {
+			guard let article = WikiArticle(string: url)
+				else { return nil }
+			self.addArticle(article)
+			return article
+		}
 	}
 	
 	func addArticle(article: WikiArticle) {
@@ -65,8 +75,8 @@ class DataManager {
 		var coordinates_count = 0
 		for line in urls {
 			let op = NSBlockOperation(block: {
-				guard let article = WikiArticle(string: line)	else { return }
-				
+				guard let article = WikiArticle(string: line)
+					else { return }
 				self.addArticle(article)
 				if article.coordinates != nil { coordinates_count += 1 }
 			})
@@ -93,7 +103,7 @@ class DataManager {
 		
 		print("\(count) valid articles including \(coordinates_count) with coordinates. Took \(a).")
 	}
-
+	
 	var articles = Set<WikiArticle>()
 	
 	func doWork(a: String) {
@@ -108,13 +118,10 @@ class DataManager {
 		let oq = NSOperationQueue()
 		oq.qualityOfService = .Utility
 		oq.addOperation(workOperation)
-
+		
 	}
 	
 	
 	var count = 0
-//	var tmp_array: [WikiArticle]?
-
-	
 	
 }

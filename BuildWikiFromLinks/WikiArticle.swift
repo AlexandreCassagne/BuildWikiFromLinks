@@ -117,8 +117,8 @@ class WikiArticle: Hashable, CustomStringConvertible, NSCoding {
 			else { return nil}
 		guard let normalizedTitle = ((pages.first!.1)["title"]) as? String
 			else { return nil }
-		guard let fullURL = ((pages.first!.1)["fullurl"]) as? String else {
-			print("Error obtaining 'fullurl' property : \(pages, url)")
+		guard let fullURL = ((pages.first!.1)["canonicalurl"]) as? String else {
+			print("Error obtaining 'canonicalurl' property : \(pages, url)")
 			return nil
 		}
 		return (pageid, normalizedTitle, fullURL)
@@ -133,11 +133,7 @@ class WikiArticle: Hashable, CustomStringConvertible, NSCoding {
 	}
 
 	lazy var otherLanguages: [String: String]? = {
-		let url = WikiArticle.URLForCommand(self.language, pageID: self.pageID, commands: "prop=langlinks&llprop=url")
-		
-		let request = NSData(contentsOfURL: url)!
-		
-		guard let a = try? NSJSONSerialization.JSONObjectWithData(request, options: NSJSONReadingOptions.MutableContainers) as! Dictionary<String, AnyObject> else {
+		guard let a = try? NSJSONSerialization.JSONObjectWithData(self.requestData, options: NSJSONReadingOptions.MutableContainers) as! Dictionary<String, AnyObject> else {
 			print("Error loading language links for \(self.articleName, self.language)");
 			return [:]
 		}
@@ -212,14 +208,14 @@ class WikiArticle: Hashable, CustomStringConvertible, NSCoding {
 
 }
 extension WikiArticle {
-	static func URLForCommand(language: Language, pageID: Int, commands: String) -> NSURL {
+	/* static func URLForCommand(language: Language, pageID: Int, commands: String) -> NSURL {
 		let escapedString = "https://\(language.rawValue).wikipedia.org/w/api.php?action=query&format=json&pageids=\(pageID)&\(commands)"
 		return NSURL(string: escapedString)!
-	}
+	} */
 	
 	static func soleURLForArticle(language: Language, pageID: Int) -> NSURL {
 		let pipe = "%7C"
-		let escapedString = "https://\(language.rawValue).wikipedia.org/w/api.php?action=query&format=json&prop=info\(pipe)coordinates\(pipe)pageimages\(pipe)langlinks\(pipe)extracts&exintro=&explaintext&llprop=url&inprop=url&lllimit=499&pageids=\(pageID)"
+		let escapedString = "https://\(language.rawValue).wikipedia.org/w/api.php?action=query&format=json&prop=info\(pipe)coordinates\(pipe)pageimages\(pipe)langlinks\(pipe)extracts&exintro=&explaintext&llprop=url&piprop=name\(pipe)original&inprop=url&lllimit=499&pageids=\(pageID)"
 		return NSURL(string: escapedString)!
 	}
 }
