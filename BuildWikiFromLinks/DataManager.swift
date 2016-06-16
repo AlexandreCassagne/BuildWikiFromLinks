@@ -14,6 +14,11 @@ protocol DataManagerDelegate: class {
 }
 
 class DataManager {
+	
+	init() {
+		
+	}
+	
 	static let sharedManager = DataManager()
 	static let DataManagerReportCompletionNotificationName = "DataManagerReportCompletion"
 	
@@ -33,32 +38,6 @@ class DataManager {
 			urls.insert(line)
 		}
 		
-		/*
-		text.enumerateLines { (line, stop) in
-		self.count = self.count + 1
-		
-		guard let article = WikiArticle(string: line)	else { return }
-		guard !self.articles.contains(article)			else { return }
-		
-		
-		let op = NSBlockOperation(block: {
-		article.populateFields()
-		
-		if article.coordinates == nil { return }
-		self.articles.insert(article)
-		
-		})
-		
-		op.completionBlock = {
-		NSOperationQueue.mainQueue().addOperationWithBlock({
-		self.progressIndicator.maxValue = 1
-		self.progressIndicator.doubleValue = (Double(self.count) / Double(urls.count))
-		})
-		}
-		
-		
-		queue.addOperation(op)
-		} */
 		var coordinates_count = 0
 		for line in urls {
 			
