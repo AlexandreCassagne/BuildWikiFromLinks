@@ -23,7 +23,33 @@ class DataManager {
 	static let DataManagerReportCompletionNotificationName = "DataManagerReportCompletion"
 	
 	weak var delegate: DataManagerDelegate?
+	
+	func lookup(article: WikiArticle, inLanguage: WikiArticle.Language) {
 		
+	}
+	
+	func addArticle(article: WikiArticle) {
+		guard !self.articles.contains(article)
+			else { return }
+		article.populateFields()
+		self.articles.insert(article)
+		
+		if let langlinks = article.otherLanguages {
+			for langlink in langlinks {
+				print(langlink)
+				guard let _ = WikiArticle.Language(rawValue: langlink.0)
+					else { continue }
+				let link = langlink.1
+				guard let article = WikiArticle(string: link)
+					else { return }
+				self.addArticle(article)
+			}
+		}
+	}
+	
+	var urls = Set<String>()
+	
+	
 	private func work(text: String) {
 		let start = NSDate()
 		
@@ -33,36 +59,26 @@ class DataManager {
 		
 		count = 0
 		
-		var urls = Set<String>()
 		text.enumerateLines { (line, stop) in
-			urls.insert(line)
+			self.urls.insert(line)
 		}
 		
 		var coordinates_count = 0
 		for line in urls {
-			
-			
-			
 			let op = NSBlockOperation(block: {
 				guard let article = WikiArticle(string: line)	else { return }
-				guard !self.articles.contains(article)			else { return }
 				
-				article.populateFields()
-				
+				self.addArticle(article)
 				if article.coordinates != nil { coordinates_count += 1 }
-				self.articles.insert(article)
 			})
 			
 			op.completionBlock = {
 				NSOperationQueue.mainQueue().addOperationWithBlock({
 					self.count = self.count + 1
-					self.delegate?.reportProgress(self, progress: self.count, total: urls.count)
-					//self.progressIndicator.maxValue = 1
-					//self.progressIndicator.doubleValue = (Double(self.count) / Double(urls.count))
+					self.delegate?.reportProgress(self, progress: self.count, total: self.urls.count)
 					NSNotificationCenter.defaultCenter().postNotificationName(DataManager.DataManagerReportCompletionNotificationName, object: self)
 				})
 			}
-			
 			queue.addOperation(op)
 		}
 		queue.waitUntilAllOperationsAreFinished()

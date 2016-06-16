@@ -60,8 +60,14 @@ final class ViewController: NSViewController, NSTableViewDataSource, NSTableView
 		tmp_array = Array(sender.articles)
 		
 		tmp_array!.sortInPlace { (a, b) -> Bool in
-			let result = a.articleName.compare(b.articleName)
-			return result == .OrderedAscending
+			let first = a.language.rawValue.compare(b.language.rawValue)
+			if first == NSComparisonResult.OrderedSame {
+				let result = a.articleName.compare(b.articleName)
+				return result == .OrderedAscending
+			}
+			else {
+				return first == .OrderedAscending
+			}
 		}
 		
 		self.tableView.reloadData()
@@ -71,6 +77,7 @@ final class ViewController: NSViewController, NSTableViewDataSource, NSTableView
 	}
 
 	func reportProgress(sender: DataManager, progress: Int, total: Int) {
+		self.progressIndicator.indeterminate = false
 		self.progressIndicator.doubleValue = Double(progress) / Double(total)
 	}
 	
@@ -79,7 +86,8 @@ final class ViewController: NSViewController, NSTableViewDataSource, NSTableView
 		
 		DataManager.sharedManager.doWork(a)
 //		oq.waitUntilAllOperationsAreFinished()
-		
+		self.progressIndicator.indeterminate = true
+
 		fieldEditor.string = ""
 		return true
 	}

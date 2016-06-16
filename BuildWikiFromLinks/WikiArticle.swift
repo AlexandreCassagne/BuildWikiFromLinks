@@ -17,9 +17,10 @@ class WikiArticle: Hashable, CustomStringConvertible, NSCoding {
 		self.pageID = validID.id
 		self.articleName = validID.title
 		self.language = language
+		self.pageURL = NSURL(string: validID.url)!
 	}
 	init?(string: String) {
-		let matcher =  "https:\\/\\/(en|fr).wikipedia.org\\/wiki\\/(.*)"
+		let matcher =  "https:\\/\\/([a-z]{2}).wikipedia.org\\/wiki\\/(.*)"
 		
 		guard let _ = NSURL(string: string)
 			else {return nil}
@@ -37,11 +38,13 @@ class WikiArticle: Hashable, CustomStringConvertible, NSCoding {
 		guard let validID = WikiArticle.validateArticle(self.articleName, language: self.language) else { return nil }
 		self.pageID = validID.id
 		self.articleName = validID.title
+		self.pageURL = NSURL(string: validID.url)!
 	}
-	init(language aLanguage: Language, articleName anArticleName: String, pageID aPageID: Int) {
+	init(language aLanguage: Language, articleName anArticleName: String, pageID aPageID: Int, url: NSURL) {
 		language = aLanguage
 		articleName = anArticleName
 		pageID = aPageID
+		pageURL = url
 	}
 	
 	@objc func encodeWithCoder(aCoder: NSCoder) {
@@ -52,6 +55,7 @@ class WikiArticle: Hashable, CustomStringConvertible, NSCoding {
 			self.pageID = dictionary["pageID"] as! Int
 			self.articleName = dictionary["articleName"] as! String
 			self.language = Language(rawValue: dictionary["language"] as! String)!
+			self.pageURL = dictionary["fullURL"] as! NSURL
 			self.coordinates = dictionary["coordinates"] as? Coordinates
 			self.summary = dictionary["summary"] as? String
 			self.otherLanguages = dictionary["otherLanguages"] as? [String: String]
@@ -76,6 +80,8 @@ class WikiArticle: Hashable, CustomStringConvertible, NSCoding {
 	var description: String { return "\(language), \(articleName), \(coordinates), \(otherLanguages?.keys.sort())" }
 	var hashValue: Int { return pageID.hashValue ^ language.hashValue }
 	
+	
+	var pageURL: NSURL
 	var pageID: Int
 	var language: Language
 	var articleName: String
@@ -89,8 +95,9 @@ class WikiArticle: Hashable, CustomStringConvertible, NSCoding {
 		case ru = "ru"
 	}
 	
-	private static func validateArticle(articleName: String, language: Language) -> (id: Int, title: String)? {
-		let escapedString = "https://\(language.rawValue).wikipedia.org/w/api.php?action=query&format=json&redirects&titles=\(articleName)"
+	private static func validateArticle(articleName: String, language: Language) -> (id: Int, title: String, url: String)? {
+		let escapedString =
+			"https://\(language.rawValue).wikipedia.org/w/api.php?action=query&format=json&redirects&titles=\(articleName)&prop=info&inprop=url"
 		let url = NSURL(string: escapedString)!
 		let contents = try! String(contentsOfURL: url)
 		
@@ -103,10 +110,9 @@ class WikiArticle: Hashable, CustomStringConvertible, NSCoding {
 			else { return nil}
 		guard let normalizedTitle = ((pages.first!.1)["title"]) as? String
 			else { return nil }
-		
-		return (pageid, normalizedTitle)
+		let fullURL = ((pages.first!.1)["fullurl"]) as! String
+		return (pageid, normalizedTitle, fullURL)
 	}
-	
 	typealias Coordinates = [String: NSNumber]
 	
 	func populateFields() {
@@ -136,7 +142,7 @@ class WikiArticle: Hashable, CustomStringConvertible, NSCoding {
 			guard let lang = langLink["lang"], let url = langLink["url"] else { continue }
 			guard let _ = Language(rawValue: lang), let _ = NSURL(string: url) else { continue }
 			
-			ret[lang] = url //itemURL
+			ret[lang] = url
 		}
 		return ret
 	}()
@@ -198,6 +204,11 @@ class WikiArticle: Hashable, CustomStringConvertible, NSCoding {
 extension WikiArticle {
 	static func URLForCommand(language: Language, pageID: Int, commands: String) -> NSURL {
 		let escapedString = "https://\(language.rawValue).wikipedia.org/w/api.php?action=query&format=json&pageids=\(pageID)&\(commands)"
+		return NSURL(string: escapedString)!
+	}
+	
+	static func soleURLForArticle(language: Language, pageID: Int) -> NSURL {
+		let escapedString = "https://\(language.rawValue).wikipedia.org/w/api.php?action=query&prop=info|coordinates|pageimages|langlinks|extracts&exintro=&explaintext&llprop=url&&inprop=url&lllimit=499&pageid=\(pageID)"
 		return NSURL(string: escapedString)!
 	}
 }
