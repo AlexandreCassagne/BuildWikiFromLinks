@@ -64,6 +64,11 @@ class WikiArticle: Hashable, CustomStringConvertible, NSCoding {
 		}
 	}
 	
+	lazy var requestData: NSData = {
+		let d = NSData(contentsOfURL: WikiArticle.soleURLForArticle(self.language, pageID: self.pageID))!
+		return d
+	}()
+	
 	func toDictionary() -> [String: AnyObject] {
 		var dictionary = [String: AnyObject]()
 		
@@ -77,7 +82,9 @@ class WikiArticle: Hashable, CustomStringConvertible, NSCoding {
 		return dictionary
 	}
 		
-	var description: String { return "\(language), \(articleName), \(coordinates), \(otherLanguages?.keys.sort())" }
+//	var description: String { return "\(language), \(articleName), \(coordinates), \(otherLanguages?.keys.sort())" }
+	var description: String { return self.toDictionary().description }
+	
 	var hashValue: Int { return pageID.hashValue ^ language.hashValue }
 	
 	
@@ -99,9 +106,9 @@ class WikiArticle: Hashable, CustomStringConvertible, NSCoding {
 		let escapedString =
 			"https://\(language.rawValue).wikipedia.org/w/api.php?action=query&format=json&redirects&titles=\(articleName)&prop=info&inprop=url"
 		let url = NSURL(string: escapedString)!
-		let contents = try! String(contentsOfURL: url)
+//		let contents = try! String(contentsOfURL: url)
 		
-		guard let a = try? NSJSONSerialization.JSONObjectWithData((contents).dataUsingEncoding(NSUnicodeStringEncoding)!, options: NSJSONReadingOptions.MutableContainers) as! Dictionary<String, AnyObject>
+		guard let a = try? NSJSONSerialization.JSONObjectWithData(NSData(contentsOfURL: url)!, options: NSJSONReadingOptions.MutableContainers) as! Dictionary<String, AnyObject>
 			else { return nil }
 		
 		guard let pages = ((a["query"]?["pages"])) as? Dictionary<String, AnyObject>
@@ -110,7 +117,10 @@ class WikiArticle: Hashable, CustomStringConvertible, NSCoding {
 			else { return nil}
 		guard let normalizedTitle = ((pages.first!.1)["title"]) as? String
 			else { return nil }
-		let fullURL = ((pages.first!.1)["fullurl"]) as! String
+		guard let fullURL = ((pages.first!.1)["fullurl"]) as? String else {
+			print("Error obtaining 'fullurl' property : \(pages, url)")
+			return nil
+		}
 		return (pageid, normalizedTitle, fullURL)
 	}
 	typealias Coordinates = [String: NSNumber]
@@ -147,9 +157,9 @@ class WikiArticle: Hashable, CustomStringConvertible, NSCoding {
 		return ret
 	}()
 	lazy var coordinates: Coordinates? = {
-		let contents = try! String(contentsOfURL: WikiArticle.URLForCommand(self.language, pageID: self.pageID, commands: "prop=coordinates"))
+//		let contents = try! String(contentsOfURL: WikiArticle.URLForCommand(self.language, pageID: self.pageID, commands: "prop=coordinates"))
 		
-		guard let a = try? NSJSONSerialization.JSONObjectWithData((contents).dataUsingEncoding(NSUnicodeStringEncoding)!, options: NSJSONReadingOptions.MutableContainers) as! Dictionary<String, AnyObject>
+		guard let a = try? NSJSONSerialization.JSONObjectWithData(self.requestData, options: NSJSONReadingOptions.MutableContainers) as! Dictionary<String, AnyObject>
 			else { return nil }
 		
 		guard let pages = ((a["query"]?["pages"])) as? Dictionary<String, AnyObject>
@@ -168,9 +178,9 @@ class WikiArticle: Hashable, CustomStringConvertible, NSCoding {
 		return ["lat": lat_d, "lon": lon_d]
 	}()
 	lazy var image: NSURL? = {
-		let url = WikiArticle.URLForCommand(self.language, pageID: self.pageID, commands: "prop=pageimages&piprop=name%7Coriginal")
+//		let url = WikiArticle.URLForCommand(self.language, pageID: self.pageID, commands: "prop=pageimages&piprop=name%7Coriginal")
 		
-		let a = try! NSJSONSerialization.JSONObjectWithData(NSData(contentsOfURL: url)!, options: NSJSONReadingOptions.MutableContainers) as! Dictionary<String, AnyObject>
+		let a = try! NSJSONSerialization.JSONObjectWithData(self.requestData, options: NSJSONReadingOptions.MutableContainers) as! Dictionary<String, AnyObject>
 		
 		
 		guard let pages = ((a["query"]?["pages"])) as? Dictionary<String, AnyObject>
@@ -181,10 +191,10 @@ class WikiArticle: Hashable, CustomStringConvertible, NSCoding {
 		
 	}()
 	lazy var summary: String? = {
-		let url = WikiArticle.URLForCommand(self.language, pageID: self.pageID, commands: "prop=extracts&exintro=&explaintext")
-		let request = NSData(contentsOfURL: url)!
+//		let url = WikiArticle.URLForCommand(self.language, pageID: self.pageID, commands: "prop=extracts&exintro=&explaintext")
+//		let request = NSData(contentsOfURL: url)!
 		
-		guard let a = try? NSJSONSerialization.JSONObjectWithData(request, options: NSJSONReadingOptions.MutableContainers) as! Dictionary<String, AnyObject> else {
+		guard let a = try? NSJSONSerialization.JSONObjectWithData(self.requestData, options: NSJSONReadingOptions.MutableContainers) as! Dictionary<String, AnyObject> else {
 			print("Error loading summary for \(self.articleName, self.language)");
 			return nil
 		}
@@ -208,7 +218,8 @@ extension WikiArticle {
 	}
 	
 	static func soleURLForArticle(language: Language, pageID: Int) -> NSURL {
-		let escapedString = "https://\(language.rawValue).wikipedia.org/w/api.php?action=query&prop=info|coordinates|pageimages|langlinks|extracts&exintro=&explaintext&llprop=url&&inprop=url&lllimit=499&pageid=\(pageID)"
+		let pipe = "%7C"
+		let escapedString = "https://\(language.rawValue).wikipedia.org/w/api.php?action=query&format=json&prop=info\(pipe)coordinates\(pipe)pageimages\(pipe)langlinks\(pipe)extracts&exintro=&explaintext&llprop=url&inprop=url&lllimit=499&pageids=\(pageID)"
 		return NSURL(string: escapedString)!
 	}
 }

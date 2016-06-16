@@ -36,7 +36,6 @@ class DataManager {
 		
 		if let langlinks = article.otherLanguages {
 			for langlink in langlinks {
-				print(langlink)
 				guard let _ = WikiArticle.Language(rawValue: langlink.0)
 					else { continue }
 				let link = langlink.1

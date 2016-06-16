@@ -10,6 +10,8 @@ import Cocoa
 
 final class ViewController: NSViewController, NSTableViewDataSource, NSTableViewDelegate, NSTextFieldDelegate, DataManagerDelegate {
 	
+	@IBOutlet var timeRemainingLabel: NSTextField!
+	
 	@IBOutlet var tableView : NSTableView!
 	@IBOutlet var progressIndicator : NSProgressIndicator!
 	override func viewDidLoad() {
@@ -70,13 +72,54 @@ final class ViewController: NSViewController, NSTableViewDataSource, NSTableView
 			}
 		}
 		
+		averageTimeInterval = 0
+		lastProgress = nil
+		
+		let interval = -beginDate!.timeIntervalSinceNow
+		let a = dcf.stringFromTimeInterval(interval)
+		
+		timeRemainingLabel.stringValue = "Done! Pulled \(sender.articles.count) articles in \(a ?? "(unknown time)")."
+		
+		beginDate = nil
+		
 		self.tableView.reloadData()
 		self.writeArray(self.tmp_array!)
 		print("Done!")
 
 	}
 
+	
+	private var beginDate: NSDate?
+	private var averageTimeInterval: NSTimeInterval = 0
+	private var lastProgress: NSDate?
+	private let smoothing_factor = 0.03
+	private func calculateTimeRemaining(done: Int, total: Int) -> NSTimeInterval {
+		guard let _lastProgress = lastProgress, let _ = beginDate else {
+			beginDate = NSDate()
+			lastProgress = NSDate()
+			return NSTimeInterval.infinity
+		}
+		averageTimeInterval = smoothing_factor * (-_lastProgress.timeIntervalSinceNow) + (1 - smoothing_factor) * averageTimeInterval;
+		lastProgress = NSDate()
+		return averageTimeInterval * NSTimeInterval(total - done)
+	}
+	
+	lazy var dcf: NSDateComponentsFormatter = {
+		let dcf = NSDateComponentsFormatter()
+		
+		let unit: NSCalendarUnit = [.Second, .Minute, .Hour]
+		dcf.allowedUnits = unit
+		dcf.zeroFormattingBehavior = .DropAll
+		dcf.allowsFractionalUnits = true
+		dcf.unitsStyle = .Full
+		return dcf
+	}()
+	
 	func reportProgress(sender: DataManager, progress: Int, total: Int) {
+		let ti = self.calculateTimeRemaining(progress, total: total)
+		if isinf(ti) { return }
+		timeRemainingLabel.stringValue = dcf.stringFromTimeInterval(ti) ?? ""
+		
 		self.progressIndicator.indeterminate = false
 		self.progressIndicator.doubleValue = Double(progress) / Double(total)
 	}
