@@ -8,12 +8,14 @@
 
 import Cocoa
 
-class ViewController: NSViewController, NSTableViewDataSource, NSTableViewDelegate, NSTextFieldDelegate {
+final class ViewController: NSViewController, NSTableViewDataSource, NSTableViewDelegate, NSTextFieldDelegate, DataManagerDelegate {
 	
 	@IBOutlet var tableView : NSTableView!
 	@IBOutlet var progressIndicator : NSProgressIndicator!
 	override func viewDidLoad() {
 		super.viewDidLoad()
+		DataManager.sharedManager.delegate = self
+		progressIndicator.maxValue = 1.0
 		// Do any additional setup after loading the view.
 	}
 
@@ -52,112 +54,44 @@ class ViewController: NSViewController, NSTableViewDataSource, NSTableViewDelega
 		return tmp_array?.count ?? 0
 	}
 	
-	var articles = Set<WikiArticle>()
-
-	private func work(text: String) {
-		let queue = NSOperationQueue()
-		queue.qualityOfService = .Background
-		queue.maxConcurrentOperationCount = 25
+	private var tmp_array: [WikiArticle]?
+	
+	func reportCompletion(sender: DataManager) {
+		tmp_array = Array(sender.articles)
 		
-		count = 0
-		
-		var urls = Set<String>()
-		text.enumerateLines { (line, stop) in
-			urls.insert(line)
+		tmp_array!.sortInPlace { (a, b) -> Bool in
+			let result = a.articleName.compare(b.articleName)
+			return result == .OrderedAscending
 		}
 		
-		print(urls.count)
-		/*
-		text.enumerateLines { (line, stop) in
-			self.count = self.count + 1
+		self.tableView.reloadData()
+		self.writeArray(self.tmp_array!)
+		print("Done!")
 
-			guard let article = WikiArticle(string: line)	else { return }
-			guard !self.articles.contains(article)			else { return }
-			
-			
-			let op = NSBlockOperation(block: {
-				article.populateFields()
-				
-				if article.coordinates == nil { return }
-				self.articles.insert(article)
-				
-			})
-			
-			op.completionBlock = {
-				NSOperationQueue.mainQueue().addOperationWithBlock({
-					self.progressIndicator.maxValue = 1
-					self.progressIndicator.doubleValue = (Double(self.count) / Double(urls.count))
-				})
-			}
-			
-			
-			queue.addOperation(op)
-		} */
-		for line in urls {
-			
-			guard let article = WikiArticle(string: line)	else { return }
-			guard !self.articles.contains(article)			else { return }
-			
-			
-			let op = NSBlockOperation(block: {
-				article.populateFields()
-				
-				if article.coordinates == nil { return }
-				self.articles.insert(article)
-				
-			})
-			
-			op.completionBlock = {
-				NSOperationQueue.mainQueue().addOperationWithBlock({
-					self.count = self.count + 1
-					print(self.count)
-					self.progressIndicator.maxValue = 1
-					self.progressIndicator.doubleValue = (Double(self.count) / Double(urls.count))
-					
-				})
-			}
-			
-			queue.addOperation(op)
-		}
-		queue.waitUntilAllOperationsAreFinished()
-		
+	}
+
+	func reportProgress(sender: DataManager, progress: Int, total: Int) {
+		self.progressIndicator.doubleValue = Double(progress) / Double(total)
 	}
 	
 	func control(control: NSControl, textShouldEndEditing fieldEditor: NSText) -> Bool {
 		guard let a = fieldEditor.string else { return true }
 		
-		let workOperation = NSBlockOperation {
-			self.work(a)
-		}
-		workOperation.completionBlock = {
-			NSOperationQueue.mainQueue().addOperationWithBlock({
-				self.tmp_array = nil
-				self.tmp_array = Array(self.articles)
-				self.tableView.reloadData()
-				
-				self.writeArray(self.tmp_array!)
-				print("Done!")
-			})
-		}
-		let oq = NSOperationQueue()
-		oq.qualityOfService = .Utility
-		oq.addOperation(workOperation)
-		
-		oq.waitUntilAllOperationsAreFinished()
+		DataManager.sharedManager.doWork(a)
+//		oq.waitUntilAllOperationsAreFinished()
 		
 		fieldEditor.string = ""
 		return true
 	}
 	
-	var count = 0
-	var tmp_array: [WikiArticle]?
 
 	private func writeArray(array: [WikiArticle]) {
 		var articles = [[String: AnyObject]]()
 		for article in array {
 			articles.append(article.toDictionary())
 		}
-		print(array.count)
+		
+//		NSKeyedArchiver.archiveRootObject(array, toFile: NSHomeDirectory().stringByAppendingString("/file.plist"))
 		NSArray(array: articles).writeToFile(NSHomeDirectory().stringByAppendingString("/file.plist"), atomically: true)
 	}
 }

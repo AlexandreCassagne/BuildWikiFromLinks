@@ -3,6 +3,7 @@
     <dependencies>
         <deployment identifier="macosx"/>
         <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="10117"/>
+        <plugIn identifier="com.apple.MapKitIBPlugin" version="10117"/>
     </dependencies>
     <scenes>
         <!--Application-->
@@ -615,6 +616,11 @@
                                             </connections>
                                         </menuItem>
                                         <menuItem isSeparatorItem="YES" id="eu3-7i-yIM"/>
+                                        <menuItem title="Map View" keyEquivalent="M" id="Nsu-of-6Dn">
+                                            <connections>
+                                                <segue destination="BXR-Vd-03V" kind="show" id="f63-5A-ppn"/>
+                                            </connections>
+                                        </menuItem>
                                         <menuItem title="Bring All to Front" id="LE2-aR-0XJ">
                                             <modifierMask key="keyEquivalentModifierMask"/>
                                             <connections>
@@ -664,6 +670,126 @@
                 <customObject id="Oky-zY-oP4" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="75" y="250"/>
+        </scene>
+        <!--Window Controller-->
+        <scene sceneID="Ndl-wi-NfL">
+            <objects>
+                <windowController id="BXR-Vd-03V" sceneMemberID="viewController">
+                    <window key="window" title="Window" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" oneShot="NO" releasedWhenClosed="NO" showsToolbarButton="NO" frameAutosaveName="" animationBehavior="default" id="NlJ-yr-etj">
+                        <windowStyleMask key="styleMask" titled="YES" miniaturizable="YES" resizable="YES"/>
+                        <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
+                        <rect key="contentRect" x="196" y="249" width="480" height="270"/>
+                        <rect key="screenRect" x="0.0" y="0.0" width="1440" height="900"/>
+                    </window>
+                    <connections>
+                        <segue destination="EM3-kK-Gxh" kind="relationship" relationship="window.shadowedContentViewController" id="gtZ-Ws-kOj"/>
+                    </connections>
+                </windowController>
+                <customObject id="w7w-9p-29M" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="660" y="250"/>
+        </scene>
+        <!--MapVC-->
+        <scene sceneID="Chg-ze-zwS">
+            <objects>
+                <viewController id="EM3-kK-Gxh" customClass="MapVC" customModule="BuildWikiFromLinks" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" id="fi6-zn-nrw">
+                        <rect key="frame" x="0.0" y="0.0" width="480" height="270"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                        <subviews>
+                            <mapView mapType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="Dbl-KM-yYx">
+                                <rect key="frame" x="0.0" y="0.0" width="480" height="270"/>
+                            </mapView>
+                        </subviews>
+                        <constraints>
+                            <constraint firstAttribute="trailing" secondItem="Dbl-KM-yYx" secondAttribute="trailing" id="1y2-jf-lZ9"/>
+                            <constraint firstItem="Dbl-KM-yYx" firstAttribute="top" secondItem="fi6-zn-nrw" secondAttribute="top" id="Fm3-ho-XBZ"/>
+                            <constraint firstItem="Dbl-KM-yYx" firstAttribute="leading" secondItem="fi6-zn-nrw" secondAttribute="leading" id="Gcg-S0-nsh"/>
+                            <constraint firstAttribute="bottom" secondItem="Dbl-KM-yYx" secondAttribute="bottom" id="QTn-Rd-jAn"/>
+                        </constraints>
+                    </view>
+                    <connections>
+                        <outlet property="mapView" destination="Dbl-KM-yYx" id="gON-fa-8I0"/>
+                    </connections>
+                </viewController>
+                <customObject id="6z7-CB-4KE" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="660" y="680"/>
+        </scene>
+        <!--DetailVC-->
+        <scene sceneID="ZZP-rC-dnv">
+            <objects>
+                <viewController storyboardIdentifier="DetailViewController" id="9f2-Q8-N4i" customClass="DetailVC" customModule="BuildWikiFromLinks" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" id="q8J-Z1-pc0">
+                        <rect key="frame" x="0.0" y="0.0" width="536" height="470"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                        <subviews>
+                            <scrollView borderType="none" horizontalLineScroll="10" horizontalPageScroll="10" verticalLineScroll="10" verticalPageScroll="10" hasHorizontalScroller="NO" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="AIe-3H-yDj">
+                                <rect key="frame" x="198" y="317" width="318" height="133"/>
+                                <clipView key="contentView" drawsBackground="NO" copiesOnScroll="NO" id="rfo-OJ-4pm">
+                                    <rect key="frame" x="0.0" y="0.0" width="318" height="133"/>
+                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                    <subviews>
+                                        <textView editable="NO" selectable="NO" drawsBackground="NO" importsGraphics="NO" findStyle="panel" continuousSpellChecking="YES" allowsUndo="YES" usesRuler="YES" usesFontPanel="YES" verticallyResizable="YES" allowsNonContiguousLayout="YES" quoteSubstitution="YES" dashSubstitution="YES" spellingCorrection="YES" smartInsertDelete="YES" id="qeB-dE-xuR">
+                                            <rect key="frame" x="0.0" y="0.0" width="318" height="133"/>
+                                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                            <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                            <size key="minSize" width="318" height="133"/>
+                                            <size key="maxSize" width="504" height="10000000"/>
+                                            <color key="insertionPointColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                                            <size key="minSize" width="318" height="133"/>
+                                            <size key="maxSize" width="504" height="10000000"/>
+                                        </textView>
+                                    </subviews>
+                                </clipView>
+                                <scroller key="horizontalScroller" hidden="YES" verticalHuggingPriority="750" doubleValue="1" horizontal="YES" id="Tnn-zS-NTn">
+                                    <rect key="frame" x="-100" y="-100" width="87" height="18"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                </scroller>
+                                <scroller key="verticalScroller" verticalHuggingPriority="750" doubleValue="1" horizontal="NO" id="FYy-3I-ORI">
+                                    <rect key="frame" x="302" y="0.0" width="16" height="133"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                </scroller>
+                            </scrollView>
+                            <imageView horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="LCc-ot-4nS">
+                                <rect key="frame" x="0.0" y="0.0" width="536" height="309"/>
+                                <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyDown" id="mHZ-5Q-Jlq"/>
+                            </imageView>
+                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="FDL-lA-FRE">
+                                <rect key="frame" x="18" y="372" width="174" height="43"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="43" id="dVZ-hT-eyh"/>
+                                    <constraint firstAttribute="width" constant="170" id="sWx-AF-THb"/>
+                                </constraints>
+                                <textFieldCell key="cell" sendsActionOnEndEditing="YES" title="Label" id="7C0-Me-utA">
+                                    <font key="font" metaFont="system"/>
+                                    <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                    <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                                </textFieldCell>
+                            </textField>
+                        </subviews>
+                        <constraints>
+                            <constraint firstItem="AIe-3H-yDj" firstAttribute="top" secondItem="q8J-Z1-pc0" secondAttribute="top" constant="20" symbolic="YES" id="8Lu-Do-yYB"/>
+                            <constraint firstItem="LCc-ot-4nS" firstAttribute="leading" secondItem="q8J-Z1-pc0" secondAttribute="leading" id="BvC-0m-QyD"/>
+                            <constraint firstItem="LCc-ot-4nS" firstAttribute="top" secondItem="FDL-lA-FRE" secondAttribute="bottom" constant="63" id="CxB-mR-LuE"/>
+                            <constraint firstAttribute="bottom" secondItem="LCc-ot-4nS" secondAttribute="bottom" id="Lhz-5c-753"/>
+                            <constraint firstItem="AIe-3H-yDj" firstAttribute="leading" secondItem="FDL-lA-FRE" secondAttribute="trailing" constant="8" symbolic="YES" id="QdT-18-wNy"/>
+                            <constraint firstItem="LCc-ot-4nS" firstAttribute="top" secondItem="AIe-3H-yDj" secondAttribute="bottom" constant="8" symbolic="YES" id="XEU-fl-anu"/>
+                            <constraint firstAttribute="trailing" secondItem="AIe-3H-yDj" secondAttribute="trailing" constant="20" symbolic="YES" id="gjF-6x-ALf"/>
+                            <constraint firstItem="FDL-lA-FRE" firstAttribute="top" secondItem="q8J-Z1-pc0" secondAttribute="top" constant="55" id="six-YX-IZK"/>
+                            <constraint firstAttribute="trailing" secondItem="LCc-ot-4nS" secondAttribute="trailing" id="tvZ-ym-EOF"/>
+                            <constraint firstItem="FDL-lA-FRE" firstAttribute="leading" secondItem="q8J-Z1-pc0" secondAttribute="leading" constant="20" symbolic="YES" id="yi2-re-Snh"/>
+                        </constraints>
+                    </view>
+                    <connections>
+                        <outlet property="imageView" destination="LCc-ot-4nS" id="qlb-G9-aJr"/>
+                        <outlet property="primary" destination="FDL-lA-FRE" id="W6g-Jb-wLL"/>
+                        <outlet property="summary" destination="qeB-dE-xuR" id="WBt-VG-xb2"/>
+                    </connections>
+                </viewController>
+                <customObject id="W0Q-4B-Mlm" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1226" y="426"/>
         </scene>
         <!--View Controller-->
         <scene sceneID="hIz-AP-VOD">
@@ -754,7 +880,7 @@
                                                     <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                                     <prototypeCellViews>
                                                         <tableCellView id="FKN-mw-zAX">
-                                                            <rect key="frame" x="106" y="1" width="60.5" height="17"/>
+                                                            <rect key="frame" x="106" y="1" width="61" height="17"/>
                                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                             <subviews>
                                                                 <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="ciK-Rn-fhx">
@@ -791,7 +917,7 @@
                                                     <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                                     <prototypeCellViews>
                                                         <tableCellView id="EUY-0h-InI">
-                                                            <rect key="frame" x="169.5" y="1" width="196.5" height="17"/>
+                                                            <rect key="frame" x="169.5" y="1" width="197" height="17"/>
                                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                             <subviews>
                                                                 <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="5gE-1J-pau">
@@ -894,7 +1020,7 @@
                 </viewController>
                 <customObject id="rPt-NT-nkU" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="131.5" y="801"/>
+            <point key="canvasLocation" x="75.5" y="863"/>
         </scene>
     </scenes>
 </document>

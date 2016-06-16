@@ -7,6 +7,11 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		AC1CF1FD1D1157D1007A3B40 /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AC1CF1FC1D1157D1007A3B40 /* MapKit.framework */; };
+		AC1CF1FF1D115829007A3B40 /* DataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC1CF1FE1D115829007A3B40 /* DataManager.swift */; };
+		AC1CF2011D118873007A3B40 /* DetailVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC1CF2001D118873007A3B40 /* DetailVC.swift */; };
+		AC1CF2031D118B47007A3B40 /* WikiAnnotation.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC1CF2021D118B47007A3B40 /* WikiAnnotation.swift */; };
+		AC3CF2C01D1155CF008137AC /* MapVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC3CF2BF1D1155CF008137AC /* MapVC.swift */; };
 		ACEC7F8F1D0EDAC400379B25 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = ACEC7F8E1D0EDAC400379B25 /* AppDelegate.swift */; };
 		ACEC7F911D0EDAC400379B25 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = ACEC7F901D0EDAC400379B25 /* ViewController.swift */; };
 		ACEC7F931D0EDAC400379B25 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = ACEC7F921D0EDAC400379B25 /* Assets.xcassets */; };
@@ -16,6 +21,11 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		AC1CF1FC1D1157D1007A3B40 /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
+		AC1CF1FE1D115829007A3B40 /* DataManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DataManager.swift; sourceTree = "<group>"; };
+		AC1CF2001D118873007A3B40 /* DetailVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DetailVC.swift; sourceTree = "<group>"; };
+		AC1CF2021D118B47007A3B40 /* WikiAnnotation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WikiAnnotation.swift; sourceTree = "<group>"; };
+		AC3CF2BF1D1155CF008137AC /* MapVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MapVC.swift; sourceTree = "<group>"; };
 		ACEC7F8B1D0EDAC400379B25 /* BuildWikiFromLinks.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BuildWikiFromLinks.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		ACEC7F8E1D0EDAC400379B25 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		ACEC7F901D0EDAC400379B25 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -31,6 +41,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				AC1CF1FD1D1157D1007A3B40 /* MapKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -40,6 +51,7 @@
 		ACEC7F821D0EDAC400379B25 = {
 			isa = PBXGroup;
 			children = (
+				AC1CF1FC1D1157D1007A3B40 /* MapKit.framework */,
 				ACEC7F8D1D0EDAC400379B25 /* BuildWikiFromLinks */,
 				ACEC7F8C1D0EDAC400379B25 /* Products */,
 			);
@@ -59,9 +71,13 @@
 				ACEC7F9F1D0EF86A00379B25 /* SwiftyJSON.swift */,
 				ACEC7F8E1D0EDAC400379B25 /* AppDelegate.swift */,
 				ACEC7F901D0EDAC400379B25 /* ViewController.swift */,
+				AC1CF1FE1D115829007A3B40 /* DataManager.swift */,
 				ACEC7FA31D0FFCD500379B25 /* WikiArticle.swift */,
 				ACEC7F921D0EDAC400379B25 /* Assets.xcassets */,
 				ACEC7F941D0EDAC400379B25 /* Main.storyboard */,
+				AC3CF2BF1D1155CF008137AC /* MapVC.swift */,
+				AC1CF2001D118873007A3B40 /* DetailVC.swift */,
+				AC1CF2021D118B47007A3B40 /* WikiAnnotation.swift */,
 				ACEC7F971D0EDAC400379B25 /* Info.plist */,
 			);
 			path = BuildWikiFromLinks;
@@ -137,10 +153,14 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				AC3CF2C01D1155CF008137AC /* MapVC.swift in Sources */,
+				AC1CF1FF1D115829007A3B40 /* DataManager.swift in Sources */,
 				ACEC7F911D0EDAC400379B25 /* ViewController.swift in Sources */,
 				ACEC7FA41D0FFCD500379B25 /* WikiArticle.swift in Sources */,
 				ACEC7F8F1D0EDAC400379B25 /* AppDelegate.swift in Sources */,
 				ACEC7FA01D0EF86A00379B25 /* SwiftyJSON.swift in Sources */,
+				AC1CF2031D118B47007A3B40 /* WikiAnnotation.swift in Sources */,
+				AC1CF2011D118873007A3B40 /* DetailVC.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
