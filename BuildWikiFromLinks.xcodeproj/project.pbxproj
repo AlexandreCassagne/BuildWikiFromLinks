@@ -13,6 +13,7 @@
 		AC1CF2031D118B47007A3B40 /* WikiAnnotation.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC1CF2021D118B47007A3B40 /* WikiAnnotation.swift */; };
 		AC3CF2C01D1155CF008137AC /* MapVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC3CF2BF1D1155CF008137AC /* MapVC.swift */; };
 		AC4AA79E1D12ED38006F1D40 /* WikiLanguageArticles.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC4AA79D1D12ED38006F1D40 /* WikiLanguageArticles.swift */; };
+		AC88A8941D1428020081E8CB /* sort_urls.txt in Resources */ = {isa = PBXBuildFile; fileRef = AC88A8931D1428020081E8CB /* sort_urls.txt */; };
 		ACEC7F8F1D0EDAC400379B25 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = ACEC7F8E1D0EDAC400379B25 /* AppDelegate.swift */; };
 		ACEC7F911D0EDAC400379B25 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = ACEC7F901D0EDAC400379B25 /* ViewController.swift */; };
 		ACEC7F931D0EDAC400379B25 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = ACEC7F921D0EDAC400379B25 /* Assets.xcassets */; };
@@ -29,6 +30,7 @@
 		AC3CF2BF1D1155CF008137AC /* MapVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MapVC.swift; sourceTree = "<group>"; };
 		AC4AA79D1D12ED38006F1D40 /* WikiLanguageArticles.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WikiLanguageArticles.swift; sourceTree = "<group>"; };
 		AC88A88E1D13E9850081E8CB /* OVController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OVController.swift; sourceTree = "<group>"; };
+		AC88A8931D1428020081E8CB /* sort_urls.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = sort_urls.txt; sourceTree = "<group>"; };
 		ACEC7F8B1D0EDAC400379B25 /* BuildWikiFromLinks.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BuildWikiFromLinks.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		ACEC7F8E1D0EDAC400379B25 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		ACEC7F901D0EDAC400379B25 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -74,6 +76,7 @@
 		AC88A8921D13F65E0081E8CB /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				AC88A8931D1428020081E8CB /* sort_urls.txt */,
 				ACEC7F971D0EDAC400379B25 /* Info.plist */,
 				ACEC7F921D0EDAC400379B25 /* Assets.xcassets */,
 				ACEC7F941D0EDAC400379B25 /* Main.storyboard */,
@@ -171,6 +174,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				ACEC7F931D0EDAC400379B25 /* Assets.xcassets in Resources */,
+				AC88A8941D1428020081E8CB /* sort_urls.txt in Resources */,
 				ACEC7F961D0EDAC400379B25 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
