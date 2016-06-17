@@ -767,6 +767,20 @@
                                     <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                 </textFieldCell>
                             </textField>
+                            <popUpButton verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="qzQ-gy-DHr">
+                                <rect key="frame" x="18" y="366" width="89" height="26"/>
+                                <popUpButtonCell key="cell" type="push" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" id="hTo-pf-a7N">
+                                    <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
+                                    <font key="font" metaFont="menu"/>
+                                    <menu key="menu" id="ub3-cn-cWA">
+                                        <items>
+                                            <menuItem title="Item 1" id="3I4-89-LuJ"/>
+                                            <menuItem title="Item 2" id="pNl-kf-eu3"/>
+                                            <menuItem title="Item 3" id="0mn-Az-B0c"/>
+                                        </items>
+                                    </menu>
+                                </popUpButtonCell>
+                            </popUpButton>
                         </subviews>
                         <constraints>
                             <constraint firstItem="AIe-3H-yDj" firstAttribute="top" secondItem="q8J-Z1-pc0" secondAttribute="top" constant="20" symbolic="YES" id="8Lu-Do-yYB"/>
@@ -783,6 +797,7 @@
                     </view>
                     <connections>
                         <outlet property="imageView" destination="LCc-ot-4nS" id="qlb-G9-aJr"/>
+                        <outlet property="popup" destination="qzQ-gy-DHr" id="JBq-Hi-Xcv"/>
                         <outlet property="primary" destination="FDL-lA-FRE" id="W6g-Jb-wLL"/>
                         <outlet property="summary" destination="qeB-dE-xuR" id="WBt-VG-xb2"/>
                     </connections>

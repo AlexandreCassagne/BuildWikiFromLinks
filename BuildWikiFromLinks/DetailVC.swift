@@ -10,7 +10,7 @@ import Cocoa
 import MapKit
 
 class DetailVC: NSViewController {
-	
+	@IBOutlet var popup: NSPopUpButton!
 	@IBOutlet var primary: NSTextField!
 	@IBOutlet var summary: NSTextView!
 	@IBOutlet var imageView: NSImageView!
@@ -48,7 +48,8 @@ class DetailVC: NSViewController {
 	
 	private var selectedArticle : WikiArticle? {
 		didSet {
-			self.loadView()
+			_ = self.view
+//			self.loadView()
 			primary.stringValue = selectedArticle?.articleName ?? ""
 			summary.string = selectedArticle?.summary
 			
@@ -72,11 +73,30 @@ class DetailVC: NSViewController {
 	var article: WikiLanguageArticles? {
 		didSet {
 			self.selectedLanguage = article?.articles.first?.language
+			populateMenu()
 		}
+	}
+	
+	private func populateMenu() {
+		guard let article = article else { return }
+		popup.removeAllItems()
+		for language in article.languages {
+			popup.addItemWithTitle(language.rawValue)
+		}
+	}
+	
+	func select() {
+		guard let selected = popup.selectedItem?.title else { return }
+		print(selected)
+		
+		self.selectedLanguage = WikiArticle.Language(rawValue: selected)!
 	}
 	
 	override func viewDidLoad() {
 		super.viewDidLoad()
+		popup.target = self
+		popup.action = #selector(DetailVC.select)
+		popup.removeAllItems()
 		// Do view setup here.
 	}
 	

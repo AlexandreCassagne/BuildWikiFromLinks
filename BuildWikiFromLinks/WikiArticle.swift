@@ -201,7 +201,6 @@ class WikiArticle: Hashable, CustomStringConvertible, NSCoding {
 		else {
 			return nil
 		}
-		
 	}()
 	
 
