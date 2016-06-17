@@ -142,8 +142,17 @@ final class ViewController: NSViewController, NSTableViewDataSource, NSTableView
 			articles.append(article.toDictionary())
 		}
 		
+		
 //		NSKeyedArchiver.archiveRootObject(array, toFile: NSHomeDirectory().stringByAppendingString("/file.plist"))
 		NSArray(array: articles).writeToFile(NSHomeDirectory().stringByAppendingString("/file.plist"), atomically: true)
+		
+		
+		var groups = [[String: AnyObject]]()
+		for article in DataManager.sharedManager.languageBasedArticles {
+			groups.append(article.articles)
+		}
+		print(groups)
+		NSArray(array: groups).writeToFile(NSHomeDirectory().stringByAppendingString("/groups.plist"), atomically: true)
 	}
 }
 

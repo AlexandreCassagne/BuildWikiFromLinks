@@ -135,7 +135,7 @@ class WikiArticle: Hashable, CustomStringConvertible, NSCoding {
 	lazy var otherLanguages: [String: String]? = {
 		guard let a = try? NSJSONSerialization.JSONObjectWithData(self.requestData, options: NSJSONReadingOptions.MutableContainers) as! Dictionary<String, AnyObject> else {
 			print("Error loading language links for \(self.articleName, self.language)");
-			return [:]
+			return nil
 		}
 		
 		guard let pages = a["query"]?["pages"] as? [String: AnyObject] else { return nil }

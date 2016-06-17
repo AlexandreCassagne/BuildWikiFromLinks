@@ -19,6 +19,9 @@ class DataManager {
 		
 	}
 	
+	let enableLanguageBasedArticles = true
+	var languageBasedArticles = [WikiLanguageArticles]()
+	
 	static let sharedManager = DataManager()
 	static let DataManagerReportCompletionNotificationName = "DataManagerReportCompletion"
 	
@@ -38,6 +41,7 @@ class DataManager {
 		}
 	}
 	
+	
 	func addArticle(article: WikiArticle) {
 		guard !self.articles.contains(article)
 			else { return }
@@ -49,15 +53,12 @@ class DataManager {
 				guard let _ = WikiArticle.Language(rawValue: langlink.0)
 					else { continue }
 				let link = langlink.1
-				guard let article = WikiArticle(string: link)
-					else { return }
-				self.addArticle(article)
+				self.lookup(link)
 			}
 		}
 	}
 	
 	var urls = Set<String>()
-	
 	
 	private func work(text: String) {
 		let start = NSDate()
@@ -77,6 +78,12 @@ class DataManager {
 			let op = NSBlockOperation(block: {
 				guard let article = WikiArticle(string: line)
 					else { return }
+				if self.enableLanguageBasedArticles {
+					if let languageBasedArticle = WikiLanguageArticles(baseArticle: article) {
+						self.languageBasedArticles.append(languageBasedArticle)
+					}
+				}
+				
 				self.addArticle(article)
 				if article.coordinates != nil { coordinates_count += 1 }
 			})

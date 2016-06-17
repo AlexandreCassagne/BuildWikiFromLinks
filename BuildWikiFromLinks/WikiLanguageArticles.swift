@@ -8,16 +8,26 @@
 
 import Cocoa
 
-class WikiLanguageArticles {
+
+
+class WikiLanguageArticles: CustomStringConvertible{
+	let english_article : WikiArticle
+	var articles = [String: WikiArticle]()
 	
-	var articles = [WikiArticle]()
+	var description: String {
+		return articles.description
+	}
 	
-	init(baseArticle: WikiArticle) {
-		self.articles.append(baseArticle)
+	init?(baseArticle: WikiArticle) {
+		self.articles[baseArticle.language.rawValue] = baseArticle
+		
+		english_article = baseArticle
+		if english_article.language != .en { return nil }
 		
 		guard let langLinks = baseArticle.otherLanguages else { return }
 		for langLink in langLinks {
-			DataManager.sharedManager.lookup(langLink.1)
+			let localized = DataManager.sharedManager.lookup(langLink.1)
+			articles[langLink.0] = localized
 		}
 		
 	}
