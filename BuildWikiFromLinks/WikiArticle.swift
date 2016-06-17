@@ -122,6 +122,7 @@ class WikiArticle: Hashable, CustomStringConvertible, NSCoding {
 			print("Error obtaining 'canonicalurl' property : \(pages, url)")
 			return nil
 		}
+		
 		return (pageid, normalizedTitle, fullURL)
 	}
 	typealias Coordinates = [String: NSNumber]
@@ -188,9 +189,6 @@ class WikiArticle: Hashable, CustomStringConvertible, NSCoding {
 		
 	}()
 	lazy var summary: String? = {
-//		let url = WikiArticle.URLForCommand(self.language, pageID: self.pageID, commands: "prop=extracts&exintro=&explaintext")
-//		let request = NSData(contentsOfURL: url)!
-		
 		guard let a = try? NSJSONSerialization.JSONObjectWithData(self.requestData, options: NSJSONReadingOptions.MutableContainers) as! Dictionary<String, AnyObject> else {
 			print("Error loading summary for \(self.articleName, self.language)");
 			return nil
@@ -209,11 +207,6 @@ class WikiArticle: Hashable, CustomStringConvertible, NSCoding {
 
 }
 extension WikiArticle {
-	/* static func URLForCommand(language: Language, pageID: Int, commands: String) -> NSURL {
-		let escapedString = "https://\(language.rawValue).wikipedia.org/w/api.php?action=query&format=json&pageids=\(pageID)&\(commands)"
-		return NSURL(string: escapedString)!
-	} */
-	
 	static func soleURLForArticle(language: Language, pageID: Int) -> NSURL {
 		let pipe = "%7C"
 		let escapedString = "https://\(language.rawValue).wikipedia.org/w/api.php?action=query&format=json&prop=info\(pipe)coordinates\(pipe)pageimages\(pipe)langlinks\(pipe)extracts&exintro=&explaintext&llprop=url&piprop=name\(pipe)original&inprop=url&lllimit=499&pageids=\(pageID)"

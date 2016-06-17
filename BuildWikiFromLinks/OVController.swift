@@ -45,6 +45,10 @@ class OVController: NSObject, NSOutlineViewDelegate, NSOutlineViewDataSource {
 				view = outlineView.makeViewWithIdentifier("article_name_cell", owner: self) as? NSTableCellView
 				text = languageArticle.english_article.articleName
 			}
+			if tableColumn?.identifier == "coordinates_column" {
+				view = outlineView.makeViewWithIdentifier("coordinates_cell", owner: self) as? NSTableCellView
+				text = languageArticle.languages
+			}
 		}
 		else if let article = item as? WikiArticle {
 			if tableColumn?.identifier == "id_column" {

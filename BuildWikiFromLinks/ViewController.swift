@@ -14,7 +14,7 @@ class ViewController: NSViewController, NSTextFieldDelegate, DataManagerDelegate
 	
 	@IBOutlet var tableView : NSOutlineView!
 	@IBOutlet var progressIndicator : NSProgressIndicator!
-		
+	
 	override func viewDidLoad() {
 		super.viewDidLoad()
 		DataManager.sharedManager.delegate = self
@@ -55,9 +55,9 @@ class ViewController: NSViewController, NSTextFieldDelegate, DataManagerDelegate
 		self.reload()
 		self.writeArray(self.tmp_array!)
 		print("Done!")
-
+		
 	}
-
+	
 	
 	private var beginDate: NSDate?
 	private var averageTimeInterval: NSTimeInterval = 0
@@ -99,12 +99,12 @@ class ViewController: NSViewController, NSTextFieldDelegate, DataManagerDelegate
 		
 		DataManager.sharedManager.doWork(a)
 		self.progressIndicator.indeterminate = true
-
+		
 		fieldEditor.string = ""
 		return true
 	}
 	
-
+	
 	private func writeArray(array: [WikiArticle]) {
 		var articles = [[String: AnyObject]]()
 		for article in array {
@@ -115,7 +115,7 @@ class ViewController: NSViewController, NSTextFieldDelegate, DataManagerDelegate
 	
 	var articles: [WikiLanguageArticles]?
 	func reload() {
-		articles = DataManager.sharedManager.languageBasedArticles
+		articles = Array(DataManager.sharedManager.languageBasedArticles)
 		tableView.reloadData()
 	}
 	
@@ -146,7 +146,19 @@ class ViewController: NSViewController, NSTextFieldDelegate, DataManagerDelegate
 				view = outlineView.makeViewWithIdentifier("article_name_cell", owner: self) as? NSTableCellView
 				text = languageArticle.english_article.articleName
 			}
+			else if tableColumn?.identifier == "coordinates_column" {
+				view = outlineView.makeViewWithIdentifier("coordinates_cell", owner: self) as? NSTableCellView
+				text = languageArticle.coordinates?.description
+			}
+			else if tableColumn?.identifier == "language_column" {
+				view = outlineView.makeViewWithIdentifier("language_cell", owner: self) as? NSTableCellView
+				text = ""
+				for i in languageArticle.languages {
+					text!.appendContentsOf("\(i.rawValue) ")
+				}
+			}
 		}
+			
 		else if let article = item as? WikiArticle {
 			if tableColumn?.identifier == "id_column" {
 				view = outlineView.makeViewWithIdentifier("id_cell", owner: self) as? NSTableCellView
@@ -160,13 +172,16 @@ class ViewController: NSViewController, NSTextFieldDelegate, DataManagerDelegate
 				view = outlineView.makeViewWithIdentifier("coordinates_cell", owner: self) as? NSTableCellView
 				text = article.coordinates?.description ?? ""
 			}
+			else if tableColumn?.identifier == "language_column" {
+				view = outlineView.makeViewWithIdentifier("language_cell", owner: self) as? NSTableCellView
+				text = article.language.rawValue
+			}
 		}
 		
 		view?.textField?.stringValue = text ?? ""
-		view?.textField?.sizeToFit()
 		return view
 	}
-
+	
 	
 }
 

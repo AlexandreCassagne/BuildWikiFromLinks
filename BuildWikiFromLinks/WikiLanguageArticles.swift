@@ -10,7 +10,12 @@ import Cocoa
 
 
 
-class WikiLanguageArticles: CustomStringConvertible{
+class WikiLanguageArticles: CustomStringConvertible, Hashable, Equatable {
+	
+	var hashValue: Int {
+		return english_article.hashValue
+	}
+	
 	let english_article : WikiArticle
 	var articles = [WikiArticle]()
 	
@@ -30,8 +35,25 @@ class WikiLanguageArticles: CustomStringConvertible{
 				self.articles.append(localized)
 			}
 		}
-		
 	}
 	
+	var languages: [WikiArticle.Language] {
+		return articles.map {
+			article -> WikiArticle.Language in
+			return article.language
+		}
+	}
 	
+	var coordinates: WikiArticle.Coordinates? {
+		for article in articles {
+			if let ret = article.coordinates {
+				return ret
+			}
+		}
+		return nil
+	}
+}
+
+func ==(lhs: WikiLanguageArticles, rhs: WikiLanguageArticles) -> Bool {
+	return lhs.hashValue == rhs.hashValue
 }

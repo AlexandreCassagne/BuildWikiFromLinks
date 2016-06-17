@@ -16,7 +16,7 @@ protocol DataManagerDelegate: class {
 class DataManager {
 
 	let enableLanguageBasedArticles = true
-	var languageBasedArticles = [WikiLanguageArticles]()
+	var languageBasedArticles = Set<WikiLanguageArticles>()
 	
 	static let sharedManager = DataManager()
 	static let DataManagerReportCompletionNotificationName = "DataManagerReportCompletion"
@@ -76,7 +76,7 @@ class DataManager {
 					else { return }
 				if self.enableLanguageBasedArticles {
 					if let languageBasedArticle = WikiLanguageArticles(baseArticle: article) {
-						self.languageBasedArticles.append(languageBasedArticle)
+						self.languageBasedArticles.insert(languageBasedArticle)
 					}
 				}
 				

@@ -10,7 +10,7 @@ import Cocoa
 import MapKit
 
 class DetailVC: NSViewController {
-
+	
 	@IBOutlet var primary: NSTextField!
 	@IBOutlet var summary: NSTextView!
 	@IBOutlet var imageView: NSImageView!
@@ -36,32 +36,48 @@ class DetailVC: NSViewController {
 		return newImage;
 	}
 	
-	var article: WikiArticle? {
+	var selectedLanguage: WikiArticle.Language? {
+		didSet {
+			let validArticles = self.article?.articles.filter({ (article) -> Bool in
+				return article.language == self.selectedLanguage
+			})
+			guard let validArticle = validArticles?.first else { return }
+			self.selectedArticle = validArticle
+		}
+	}
+	
+	private var selectedArticle : WikiArticle? {
 		didSet {
 			self.loadView()
-			primary.stringValue = article?.articleName ?? ""
-			summary.string = article?.summary
+			primary.stringValue = selectedArticle?.articleName ?? ""
+			summary.string = selectedArticle?.summary
 			
 			let queue = NSOperationQueue()
 			queue.qualityOfService = .UserInitiated
 			queue.addOperationWithBlock {
-				guard let imageURL = self.article?.image else {return}
+				guard let imageURL = self.selectedArticle?.image else {return}
 				guard let data = NSData(contentsOfURL: imageURL) else { return }
 				guard let image = NSImage(data: data) else { return }
 				
 				let desiredSize = self.imageView.frame.size
 				let newImage = self.resizeImage(image, toMaxSize: desiredSize)
 				
-				NSOperationQueue.mainQueue().addOperationWithBlock({ 
+				NSOperationQueue.mainQueue().addOperationWithBlock({
 					self.imageView.image = newImage
 				})
 			}
 		}
 	}
 	
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        // Do view setup here.
-    }
-    
+	var article: WikiLanguageArticles? {
+		didSet {
+			self.selectedLanguage = article?.articles.first?.language
+		}
+	}
+	
+	override func viewDidLoad() {
+		super.viewDidLoad()
+		// Do view setup here.
+	}
+	
 }

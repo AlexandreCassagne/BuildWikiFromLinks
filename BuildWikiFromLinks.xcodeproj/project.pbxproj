@@ -51,6 +51,36 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		AC88A8901D13F64B0081E8CB /* Maps */ = {
+			isa = PBXGroup;
+			children = (
+				AC1CF2021D118B47007A3B40 /* WikiAnnotation.swift */,
+				AC3CF2BF1D1155CF008137AC /* MapVC.swift */,
+				AC1CF2001D118873007A3B40 /* DetailVC.swift */,
+			);
+			name = Maps;
+			sourceTree = "<group>";
+		};
+		AC88A8911D13F6560081E8CB /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				AC1CF1FE1D115829007A3B40 /* DataManager.swift */,
+				ACEC7FA31D0FFCD500379B25 /* WikiArticle.swift */,
+				AC4AA79D1D12ED38006F1D40 /* WikiLanguageArticles.swift */,
+			);
+			name = Models;
+			sourceTree = "<group>";
+		};
+		AC88A8921D13F65E0081E8CB /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				ACEC7F971D0EDAC400379B25 /* Info.plist */,
+				ACEC7F921D0EDAC400379B25 /* Assets.xcassets */,
+				ACEC7F941D0EDAC400379B25 /* Main.storyboard */,
+			);
+			name = Resources;
+			sourceTree = "<group>";
+		};
 		ACEC7F821D0EDAC400379B25 = {
 			isa = PBXGroup;
 			children = (
@@ -71,19 +101,13 @@
 		ACEC7F8D1D0EDAC400379B25 /* BuildWikiFromLinks */ = {
 			isa = PBXGroup;
 			children = (
+				AC88A8921D13F65E0081E8CB /* Resources */,
 				ACEC7F9F1D0EF86A00379B25 /* SwiftyJSON.swift */,
 				ACEC7F8E1D0EDAC400379B25 /* AppDelegate.swift */,
 				ACEC7F901D0EDAC400379B25 /* ViewController.swift */,
 				AC88A88E1D13E9850081E8CB /* OVController.swift */,
-				AC1CF1FE1D115829007A3B40 /* DataManager.swift */,
-				ACEC7FA31D0FFCD500379B25 /* WikiArticle.swift */,
-				AC4AA79D1D12ED38006F1D40 /* WikiLanguageArticles.swift */,
-				ACEC7F921D0EDAC400379B25 /* Assets.xcassets */,
-				ACEC7F941D0EDAC400379B25 /* Main.storyboard */,
-				AC3CF2BF1D1155CF008137AC /* MapVC.swift */,
-				AC1CF2001D118873007A3B40 /* DetailVC.swift */,
-				AC1CF2021D118B47007A3B40 /* WikiAnnotation.swift */,
-				ACEC7F971D0EDAC400379B25 /* Info.plist */,
+				AC88A8911D13F6560081E8CB /* Models */,
+				AC88A8901D13F64B0081E8CB /* Maps */,
 			);
 			path = BuildWikiFromLinks;
 			sourceTree = "<group>";

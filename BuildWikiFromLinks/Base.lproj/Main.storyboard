@@ -824,9 +824,9 @@
                                     <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                 </textFieldCell>
                             </textField>
-                            <scrollView fixedFrame="YES" autohidesScrollers="YES" horizontalLineScroll="19" horizontalPageScroll="10" verticalLineScroll="19" verticalPageScroll="10" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="QrW-Ug-Njf">
+                            <scrollView autohidesScrollers="YES" horizontalLineScroll="19" horizontalPageScroll="10" verticalLineScroll="19" verticalPageScroll="10" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="QrW-Ug-Njf">
                                 <rect key="frame" x="0.0" y="0.0" width="593" height="404"/>
-                                <clipView key="contentView" ambiguous="YES" id="2Kc-Hv-Z5p">
+                                <clipView key="contentView" id="2Kc-Hv-Z5p">
                                     <rect key="frame" x="1" y="23" width="591" height="380"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <subviews>
@@ -965,10 +965,7 @@
                                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                             <subviews>
                                                                 <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="aan-e2-10Q">
-                                                                    <rect key="frame" x="0.0" y="0.0" width="100" height="17"/>
-                                                                    <constraints>
-                                                                        <constraint firstAttribute="width" constant="96" id="Ttv-7p-SSN"/>
-                                                                    </constraints>
+                                                                    <rect key="frame" x="0.0" y="0.0" width="342" height="17"/>
                                                                     <textFieldCell key="cell" lineBreakMode="truncatingTail" sendsActionOnEndEditing="YES" title="Table View Cell" id="alC-3M-Dbi">
                                                                         <font key="font" metaFont="system"/>
                                                                         <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
@@ -977,8 +974,9 @@
                                                                 </textField>
                                                             </subviews>
                                                             <constraints>
-                                                                <constraint firstItem="aan-e2-10Q" firstAttribute="leading" secondItem="sTn-OU-5i0" secondAttribute="leading" constant="2" id="BQs-t4-L3I"/>
-                                                                <constraint firstItem="aan-e2-10Q" firstAttribute="centerY" secondItem="sTn-OU-5i0" secondAttribute="centerY" id="U8f-EE-QZr"/>
+                                                                <constraint firstItem="aan-e2-10Q" firstAttribute="centerX" secondItem="sTn-OU-5i0" secondAttribute="centerX" id="2V8-oH-Ggw"/>
+                                                                <constraint firstAttribute="trailing" secondItem="aan-e2-10Q" secondAttribute="trailing" constant="3" id="byD-E2-3zk"/>
+                                                                <constraint firstItem="aan-e2-10Q" firstAttribute="centerY" secondItem="sTn-OU-5i0" secondAttribute="centerY" id="q1M-7H-0r2"/>
                                                             </constraints>
                                                             <connections>
                                                                 <outlet property="textField" destination="aan-e2-10Q" id="fvi-qJ-yxv"/>
@@ -1014,11 +1012,15 @@
                             <constraint firstItem="45T-2i-iu8" firstAttribute="top" secondItem="IwR-D0-Up7" secondAttribute="bottom" constant="8" symbolic="YES" id="56i-a3-4T8"/>
                             <constraint firstItem="v3E-zc-gMU" firstAttribute="leading" secondItem="IwR-D0-Up7" secondAttribute="leading" id="Ar1-qw-so9"/>
                             <constraint firstItem="v3E-zc-gMU" firstAttribute="leading" secondItem="m2S-Jp-Qdl" secondAttribute="leading" constant="20" symbolic="YES" id="G2j-2I-RiE"/>
+                            <constraint firstItem="QrW-Ug-Njf" firstAttribute="top" secondItem="45T-2i-iu8" secondAttribute="bottom" constant="8" symbolic="YES" id="JwO-C7-Bg1"/>
                             <constraint firstItem="v3E-zc-gMU" firstAttribute="top" secondItem="m2S-Jp-Qdl" secondAttribute="top" constant="20" symbolic="YES" id="L37-EH-7Ws"/>
                             <constraint firstItem="IwR-D0-Up7" firstAttribute="trailing" secondItem="45T-2i-iu8" secondAttribute="trailing" id="OsY-si-gYG"/>
                             <constraint firstItem="IwR-D0-Up7" firstAttribute="leading" secondItem="45T-2i-iu8" secondAttribute="leading" id="Toc-8H-F1Q"/>
+                            <constraint firstItem="QrW-Ug-Njf" firstAttribute="centerX" secondItem="45T-2i-iu8" secondAttribute="centerX" id="Ye5-Pm-Yve"/>
                             <constraint firstItem="IwR-D0-Up7" firstAttribute="top" secondItem="v3E-zc-gMU" secondAttribute="bottom" constant="8" symbolic="YES" id="eC4-qU-32e"/>
                             <constraint firstAttribute="trailing" secondItem="v3E-zc-gMU" secondAttribute="trailing" constant="20" symbolic="YES" id="iaZ-TH-YTE"/>
+                            <constraint firstAttribute="bottom" secondItem="QrW-Ug-Njf" secondAttribute="bottom" id="qNZ-AV-pYf"/>
+                            <constraint firstItem="QrW-Ug-Njf" firstAttribute="leading" secondItem="m2S-Jp-Qdl" secondAttribute="leading" id="ws1-FA-jHI"/>
                         </constraints>
                     </view>
                     <connections>

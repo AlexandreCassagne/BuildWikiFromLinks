@@ -9,5 +9,5 @@
 import Cocoa
 import MapKit
 class WikiAnnotation: MKPointAnnotation {
-	var article: WikiArticle?
+	var article: WikiLanguageArticles?
 }

@@ -12,7 +12,7 @@ class MapVC: NSViewController, MKMapViewDelegate {
 	
 	@IBOutlet var mapView: MKMapView!
 	
-	private func addArticles(set : Set<WikiArticle>) {
+	private func addArticles(set : Set<WikiLanguageArticles>) {
 		let new_articles = Set(set.filter { (article) -> Bool in
 			if article.coordinates == nil { return false }
 			else { return true }
@@ -52,7 +52,7 @@ class MapVC: NSViewController, MKMapViewDelegate {
 		vc.article = annotation.article
 	}
 	
-	private func generateAnnotations(delta: Set<WikiArticle>) {
+	private func generateAnnotations(delta: Set<WikiLanguageArticles>) {
 		for article in delta {
 			let annotation = WikiAnnotation()
 			annotation.coordinate = {
@@ -61,8 +61,7 @@ class MapVC: NSViewController, MKMapViewDelegate {
 			}()
 			
 			annotation.article = article
-			annotation.title = article.articleName
-//			annotation.subtitle = article.summary
+			annotation.title = article.english_article.articleName
 			
 			NSOperationQueue.mainQueue().addOperationWithBlock {
 				self.mapView.addAnnotation(annotation)
@@ -70,14 +69,14 @@ class MapVC: NSViewController, MKMapViewDelegate {
 		}
 	}
 	
-	private var articles = Set<WikiArticle>()
+	private var articles = Set<WikiLanguageArticles>()
 	
 	override func awakeFromNib() {
 		mapView.delegate = self
 		
 		NSNotificationCenter.defaultCenter().addObserverForName("DataManagerReportCompletion", object: nil, queue: nil)
 		{ (let a) in
-			self.addArticles(DataManager.sharedManager.articles)
+			self.addArticles(DataManager.sharedManager.languageBasedArticles)
 		}
 	}
 	override func viewDidLoad() {
