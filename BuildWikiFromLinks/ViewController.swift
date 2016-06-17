@@ -113,6 +113,12 @@ class ViewController: NSViewController, NSTextFieldDelegate, DataManagerDelegate
 	
 	private func reload() {
 		articles = Array(DataManager.sharedManager.languageBasedArticles)
+		
+		articles?.sortInPlace({ (a, b) -> Bool in
+			if a.coordinates != nil { return true}
+			else { return false }
+		})
+		
 		tableView.reloadData()
 	}
 	
