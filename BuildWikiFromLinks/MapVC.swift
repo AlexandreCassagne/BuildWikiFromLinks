@@ -61,7 +61,7 @@ class MapVC: NSViewController, MKMapViewDelegate {
 			}()
 			
 			annotation.article = article
-			annotation.title = article.english_article.articleName
+			annotation.title = article.base_article.articleName
 			
 			NSOperationQueue.mainQueue().addOperationWithBlock {
 				self.mapView.addAnnotation(annotation)

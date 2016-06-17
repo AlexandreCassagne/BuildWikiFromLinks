@@ -13,10 +13,10 @@ import Cocoa
 class WikiLanguageArticles: CustomStringConvertible, Hashable, Equatable {
 	
 	var hashValue: Int {
-		return english_article.hashValue
+		return base_article.hashValue
 	}
 	
-	let english_article : WikiArticle
+	let base_article : WikiArticle
 	var articles = [WikiArticle]()
 	
 	var description: String {
@@ -26,8 +26,7 @@ class WikiLanguageArticles: CustomStringConvertible, Hashable, Equatable {
 	init?(baseArticle: WikiArticle) {
 		self.articles.append(baseArticle)
 		
-		english_article = baseArticle
-		if english_article.language != .en { return nil }
+		self.base_article = baseArticle
 		
 		guard let langLinks = baseArticle.otherLanguages else { return }
 		for langLink in langLinks {

@@ -144,7 +144,7 @@ class ViewController: NSViewController, NSTextFieldDelegate, DataManagerDelegate
 		if let languageArticle = item as? WikiLanguageArticles {
 			if tableColumn?.identifier == "article_name_column" {
 				view = outlineView.makeViewWithIdentifier("article_name_cell", owner: self) as? NSTableCellView
-				text = languageArticle.english_article.articleName
+				text = languageArticle.base_article.articleName
 			}
 			else if tableColumn?.identifier == "coordinates_column" {
 				view = outlineView.makeViewWithIdentifier("coordinates_cell", owner: self) as? NSTableCellView
