@@ -8,6 +8,9 @@
 
 import Cocoa
 
+// TODO: Remove this file if necessary
+// Note: This file is not included in the target and therefore not built
+
 class OVController: NSObject, NSOutlineViewDelegate, NSOutlineViewDataSource {
 	var articles: [WikiLanguageArticles]?
 	

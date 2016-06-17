@@ -10,46 +10,16 @@ import Cocoa
 import MapKit
 
 class DetailVC: NSViewController {
+	// MARK: Fields & Outlets
 	@IBOutlet var popup: NSPopUpButton!
 	@IBOutlet var primary: NSTextField!
 	@IBOutlet var summary: NSTextView!
 	@IBOutlet var imageView: NSImageView!
 	
-	private func resizeImage(image: NSImage, toMaxSize: CGSize) -> NSImage {
-		let oldWidth = image.size.width;
-		let oldHeight = image.size.height;
-		
-		let scaleFactor = (oldWidth > oldHeight) ? toMaxSize.width / oldWidth : toMaxSize.height / oldHeight;
-		
-		let newHeight = oldHeight * scaleFactor;
-		let newWidth = oldWidth * scaleFactor;
-		let newSize = CGSizeMake(newWidth, newHeight);
-		
-		return resizeImageGenerate(image, toSize: newSize)
-	}
-	
-	private func resizeImageGenerate(image: NSImage, toSize: CGSize) -> NSImage {
-		let newImage = NSImage(size: toSize)
-		newImage.lockFocus()
-		image.drawInRect(CGRectMake(0, 0, toSize.width, toSize.height))
-		newImage.unlockFocus()
-		return newImage;
-	}
-	
-	var selectedLanguage: WikiArticle.Language? {
-		didSet {
-			let validArticles = self.article?.articles.filter({ (article) -> Bool in
-				return article.language == self.selectedLanguage
-			})
-			guard let validArticle = validArticles?.first else { return }
-			self.selectedArticle = validArticle
-		}
-	}
-	
+	// MARK: -
 	private var selectedArticle : WikiArticle? {
 		didSet {
 			_ = self.view
-//			self.loadView()
 			primary.stringValue = selectedArticle?.articleName ?? ""
 			summary.string = selectedArticle?.summary
 			
@@ -70,6 +40,15 @@ class DetailVC: NSViewController {
 		}
 	}
 	
+	var selectedLanguage: WikiArticle.Language? {
+		didSet {
+			let validArticles = self.article?.articles.filter({ (article) -> Bool in
+				return article.language == self.selectedLanguage
+			})
+			guard let validArticle = validArticles?.first else { return }
+			self.selectedArticle = validArticle
+		}
+	}
 	var article: WikiLanguageArticles? {
 		didSet {
 			self.selectedLanguage = article?.articles.first?.language
@@ -77,6 +56,28 @@ class DetailVC: NSViewController {
 		}
 	}
 	
+	
+	// MARK: -
+	// MARK: Convenience
+	private func resizeImage(image: NSImage, toMaxSize: CGSize) -> NSImage {
+		let oldWidth = image.size.width;
+		let oldHeight = image.size.height;
+		
+		let scaleFactor = (oldWidth > oldHeight) ? toMaxSize.width / oldWidth : toMaxSize.height / oldHeight;
+		
+		let newHeight = oldHeight * scaleFactor;
+		let newWidth = oldWidth * scaleFactor;
+		let newSize = CGSizeMake(newWidth, newHeight);
+		
+		return resizeImageGenerate(image, toSize: newSize)
+	}
+	private func resizeImageGenerate(image: NSImage, toSize: CGSize) -> NSImage {
+		let newImage = NSImage(size: toSize)
+		newImage.lockFocus()
+		image.drawInRect(CGRectMake(0, 0, toSize.width, toSize.height))
+		newImage.unlockFocus()
+		return newImage;
+	}
 	private func populateMenu() {
 		guard let article = article else { return }
 		popup.removeAllItems()
@@ -85,19 +86,20 @@ class DetailVC: NSViewController {
 		}
 	}
 	
+	// MARK: -
+	// MARK: NSPopupButton Action
 	func select() {
 		guard let selected = popup.selectedItem?.title else { return }
-		print(selected)
-		
 		self.selectedLanguage = WikiArticle.Language(rawValue: selected)!
 	}
 	
+	
+	// MARK: NSViewController Overrides
 	override func viewDidLoad() {
 		super.viewDidLoad()
 		popup.target = self
 		popup.action = #selector(DetailVC.select)
 		popup.removeAllItems()
-		// Do view setup here.
 	}
 	
 }

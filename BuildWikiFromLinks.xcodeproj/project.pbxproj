@@ -66,6 +66,7 @@
 		AC88A8911D13F6560081E8CB /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				ACC075C01D1434E900BF70E3 /* External */,
 				AC1CF1FE1D115829007A3B40 /* DataManager.swift */,
 				ACEC7FA31D0FFCD500379B25 /* WikiArticle.swift */,
 				AC4AA79D1D12ED38006F1D40 /* WikiLanguageArticles.swift */,
@@ -84,10 +85,26 @@
 			name = Resources;
 			sourceTree = "<group>";
 		};
-		ACEC7F821D0EDAC400379B25 = {
+		ACC075C01D1434E900BF70E3 /* External */ = {
+			isa = PBXGroup;
+			children = (
+				ACEC7F9F1D0EF86A00379B25 /* SwiftyJSON.swift */,
+			);
+			name = External;
+			sourceTree = "<group>";
+		};
+		ACC075C11D1434FE00BF70E3 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
 				AC1CF1FC1D1157D1007A3B40 /* MapKit.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		ACEC7F821D0EDAC400379B25 = {
+			isa = PBXGroup;
+			children = (
+				ACC075C11D1434FE00BF70E3 /* Frameworks */,
 				ACEC7F8D1D0EDAC400379B25 /* BuildWikiFromLinks */,
 				ACEC7F8C1D0EDAC400379B25 /* Products */,
 			);
@@ -105,7 +122,6 @@
 			isa = PBXGroup;
 			children = (
 				AC88A8921D13F65E0081E8CB /* Resources */,
-				ACEC7F9F1D0EF86A00379B25 /* SwiftyJSON.swift */,
 				ACEC7F8E1D0EDAC400379B25 /* AppDelegate.swift */,
 				ACEC7F901D0EDAC400379B25 /* ViewController.swift */,
 				AC88A88E1D13E9850081E8CB /* OVController.swift */,

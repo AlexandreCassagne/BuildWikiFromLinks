@@ -10,23 +10,34 @@ import Cocoa
 
 class ViewController: NSViewController, NSTextFieldDelegate, DataManagerDelegate {
 	
+	// MARK: Fields & Outlets
 	@IBOutlet var timeRemainingLabel: NSTextField!
-	
 	@IBOutlet var tableView : NSOutlineView!
 	@IBOutlet var progressIndicator : NSProgressIndicator!
 	
-	override func viewDidLoad() {
-		super.viewDidLoad()
-		DataManager.sharedManager.delegate = self
-		progressIndicator.maxValue = 1.0
-		
-		
-		
-		// Do any additional setup after loading the view.
-	}
+	var articles: [WikiLanguageArticles]?
+	private var tmp_array: [WikiArticle]? // TODO: Remove this
 	
-	private var tmp_array: [WikiArticle]?
+
+	// MARK: Time Remaining Fields
+	// Could be removed; not essential.
+	private var beginDate: NSDate?
+	private var averageTimeInterval: NSTimeInterval = 0
+	private var lastProgress: NSDate?
+	private let smoothing_factor = 0.03
+	lazy var dcf: NSDateComponentsFormatter = {
+		let dcf = NSDateComponentsFormatter()
+		
+		let unit: NSCalendarUnit = [.Second, .Minute, .Hour]
+		dcf.allowedUnits = unit
+		dcf.zeroFormattingBehavior = .DropAll
+		dcf.allowsFractionalUnits = true
+		dcf.unitsStyle = .Full
+		return dcf
+	}() // Date formatter for
 	
+	
+	// MARK: - DataManagerDelegate
 	func reportCompletion(sender: DataManager) {
 		tmp_array = Array(sender.articles)
 		
@@ -57,12 +68,16 @@ class ViewController: NSViewController, NSTextFieldDelegate, DataManagerDelegate
 		print("Done!")
 		
 	}
+	func reportProgress(sender: DataManager, progress: Int, total: Int) {
+		let ti = self.calculateTimeRemaining(progress, total: total)
+		if isinf(ti) { return }
+		timeRemainingLabel.stringValue = dcf.stringFromTimeInterval(ti) ?? ""
+		
+		self.progressIndicator.indeterminate = false
+		self.progressIndicator.doubleValue = Double(progress) / Double(total)
+	}
 	
-	
-	private var beginDate: NSDate?
-	private var averageTimeInterval: NSTimeInterval = 0
-	private var lastProgress: NSDate?
-	private let smoothing_factor = 0.03
+	// MARK: -
 	private func calculateTimeRemaining(done: Int, total: Int) -> NSTimeInterval {
 		guard let _lastProgress = lastProgress, let _ = beginDate else {
 			beginDate = NSDate()
@@ -74,26 +89,8 @@ class ViewController: NSViewController, NSTextFieldDelegate, DataManagerDelegate
 		return averageTimeInterval * NSTimeInterval(total - done)
 	}
 	
-	lazy var dcf: NSDateComponentsFormatter = {
-		let dcf = NSDateComponentsFormatter()
-		
-		let unit: NSCalendarUnit = [.Second, .Minute, .Hour]
-		dcf.allowedUnits = unit
-		dcf.zeroFormattingBehavior = .DropAll
-		dcf.allowsFractionalUnits = true
-		dcf.unitsStyle = .Full
-		return dcf
-	}()
 	
-	func reportProgress(sender: DataManager, progress: Int, total: Int) {
-		let ti = self.calculateTimeRemaining(progress, total: total)
-		if isinf(ti) { return }
-		timeRemainingLabel.stringValue = dcf.stringFromTimeInterval(ti) ?? ""
-		
-		self.progressIndicator.indeterminate = false
-		self.progressIndicator.doubleValue = Double(progress) / Double(total)
-	}
-	
+	// MARK: - NSTextFieldDelegate
 	func control(control: NSControl, textShouldEndEditing fieldEditor: NSText) -> Bool {
 		guard let a = fieldEditor.string else { return true }
 		
@@ -105,20 +102,21 @@ class ViewController: NSViewController, NSTextFieldDelegate, DataManagerDelegate
 	}
 	
 	
+	// MARK: - Private
 	private func writeArray(array: [WikiArticle]) {
 		var articles = [[String: AnyObject]]()
 		for article in array {
 			articles.append(article.toDictionary())
-		}
+		} // TODO: broken
 	}
 	
 	
-	var articles: [WikiLanguageArticles]?
-	func reload() {
+	private func reload() {
 		articles = Array(DataManager.sharedManager.languageBasedArticles)
 		tableView.reloadData()
 	}
 	
+	// MARK: - NSOutlineView Datasource & Delegate
 	func outlineView(outlineView: NSOutlineView, numberOfChildrenOfItem item: AnyObject?) -> Int {
 		if item == nil { return self.articles?.count ?? 0 }
 		else if let item = item as? WikiLanguageArticles {
@@ -136,7 +134,6 @@ class ViewController: NSViewController, NSTextFieldDelegate, DataManagerDelegate
 		if let item = item as? WikiLanguageArticles { return item.articles.count > 0 }
 		else { return false }
 	}
-	
 	func outlineView(outlineView: NSOutlineView, viewForTableColumn tableColumn: NSTableColumn?, item: AnyObject) -> NSView? {
 		var view: NSTableCellView?
 		var text: String?
@@ -182,6 +179,12 @@ class ViewController: NSViewController, NSTextFieldDelegate, DataManagerDelegate
 		return view
 	}
 	
-	
+	// MARK: NSViewController Overrides
+	override func viewDidLoad() {
+		super.viewDidLoad()
+		DataManager.sharedManager.delegate = self
+		progressIndicator.maxValue = 1.0
+	}
+
 }
 

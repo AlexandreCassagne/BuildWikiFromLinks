@@ -15,14 +15,35 @@ protocol DataManagerDelegate: class {
 
 class DataManager {
 
-	let enableLanguageBasedArticles = true
-	var languageBasedArticles = Set<WikiLanguageArticles>()
-	
+	// MARK: Statics
 	static let sharedManager = DataManager()
 	static let DataManagerReportCompletionNotificationName = "DataManagerReportCompletion"
-	
+
+	// MARK: - Fields
+	let enableLanguageBasedArticles = true
 	weak var delegate: DataManagerDelegate?
 	
+	var languageBasedArticles = Set<WikiLanguageArticles>()
+	var urls = Set<String>()
+	var articles = Set<WikiArticle>()
+	
+	var count = 0 // TODO: Remove this ...
+	
+	
+	// MARK: - Body
+	func doWork(a: String) {
+		let workOperation = NSBlockOperation {
+			self.work(a)
+		}
+		workOperation.completionBlock = {
+			NSOperationQueue.mainQueue().addOperationWithBlock({
+				self.delegate?.reportCompletion(self)
+			})
+		}
+		let oq = NSOperationQueue()
+		oq.qualityOfService = .Utility
+		oq.addOperation(workOperation)
+	}
 	func lookup(url: String) -> WikiArticle? {
 		let matches = self.articles.filter { (article) -> Bool in
 			return article.pageURL.absoluteString == url
@@ -37,8 +58,8 @@ class DataManager {
 		}
 	}
 	
-	
-	func addArticle(article: WikiArticle) {
+	// MARK: - Private
+	private func addArticle(article: WikiArticle) {
 		guard !self.articles.contains(article)
 			else { return }
 		article.populateFields()
@@ -53,9 +74,6 @@ class DataManager {
 			}
 		}
 	}
-	
-	var urls = Set<String>()
-	
 	private func work(text: String) {
 		let start = NSDate()
 		
@@ -106,25 +124,4 @@ class DataManager {
 		
 		print("\(count) valid articles including \(coordinates_count) with coordinates. Took \(a).")
 	}
-	
-	var articles = Set<WikiArticle>()
-	
-	func doWork(a: String) {
-		let workOperation = NSBlockOperation {
-			self.work(a)
-		}
-		workOperation.completionBlock = {
-			NSOperationQueue.mainQueue().addOperationWithBlock({
-				self.delegate?.reportCompletion(self)
-			})
-		}
-		let oq = NSOperationQueue()
-		oq.qualityOfService = .Utility
-		oq.addOperation(workOperation)
-		
-	}
-	
-	
-	var count = 0
-	
 }
