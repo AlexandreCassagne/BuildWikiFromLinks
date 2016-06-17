@@ -8,52 +8,21 @@
 
 import Cocoa
 
-final class ViewController: NSViewController, NSTableViewDataSource, NSTableViewDelegate, NSTextFieldDelegate, DataManagerDelegate {
+class ViewController: NSViewController, NSTextFieldDelegate, DataManagerDelegate {
 	
 	@IBOutlet var timeRemainingLabel: NSTextField!
 	
-	@IBOutlet var tableView : NSTableView!
+	@IBOutlet var tableView : NSOutlineView!
 	@IBOutlet var progressIndicator : NSProgressIndicator!
+		
 	override func viewDidLoad() {
 		super.viewDidLoad()
 		DataManager.sharedManager.delegate = self
 		progressIndicator.maxValue = 1.0
+		
+		
+		
 		// Do any additional setup after loading the view.
-	}
-
-	func tableView(tableView: NSTableView, viewForTableColumn tableColumn: NSTableColumn?, row: Int) -> NSView? {
-		
-		var cellIdentifier: String = ""
-		var text: String?
-		
-		guard let article = tmp_array?[row] else { return nil }
-		
-		if tableColumn == tableView.tableColumns[0] {
-			cellIdentifier = "idCellID"
-			text = article.hashValue.description
-		}
-		
-		if tableColumn == tableView.tableColumns[1] {
-			cellIdentifier = "LanguageCellID"
-			text = article.language.rawValue
-			
-		} else if tableColumn == tableView.tableColumns[2] {
-			cellIdentifier = "ArticleNameCellID"
-			text = article.articleName
-		} else if tableColumn == tableView.tableColumns[3] {
-			text = article.coordinates?.description ?? ""
-			cellIdentifier = "CoordinatesCellID"
-		}
-		
-		if let cell = tableView.makeViewWithIdentifier(cellIdentifier, owner: nil) as? NSTableCellView {
-			cell.textField?.stringValue = text!
-			return cell
-		}
-		return nil
-	}
-	
-	func numberOfRowsInTableView(tableView: NSTableView) -> Int {
-		return tmp_array?.count ?? 0
 	}
 	
 	private var tmp_array: [WikiArticle]?
@@ -82,7 +51,8 @@ final class ViewController: NSViewController, NSTableViewDataSource, NSTableView
 		
 		beginDate = nil
 		
-		self.tableView.reloadData()
+		//self.tableView.reloadData()
+		self.reload()
 		self.writeArray(self.tmp_array!)
 		print("Done!")
 
@@ -128,7 +98,6 @@ final class ViewController: NSViewController, NSTableViewDataSource, NSTableView
 		guard let a = fieldEditor.string else { return true }
 		
 		DataManager.sharedManager.doWork(a)
-//		oq.waitUntilAllOperationsAreFinished()
 		self.progressIndicator.indeterminate = true
 
 		fieldEditor.string = ""
@@ -141,18 +110,63 @@ final class ViewController: NSViewController, NSTableViewDataSource, NSTableView
 		for article in array {
 			articles.append(article.toDictionary())
 		}
-		
-		
-//		NSKeyedArchiver.archiveRootObject(array, toFile: NSHomeDirectory().stringByAppendingString("/file.plist"))
-		NSArray(array: articles).writeToFile(NSHomeDirectory().stringByAppendingString("/file.plist"), atomically: true)
-		
-		
-		var groups = [[String: AnyObject]]()
-		for article in DataManager.sharedManager.languageBasedArticles {
-			groups.append(article.articles)
-		}
-		print(groups)
-		NSArray(array: groups).writeToFile(NSHomeDirectory().stringByAppendingString("/groups.plist"), atomically: true)
 	}
+	
+	
+	var articles: [WikiLanguageArticles]?
+	func reload() {
+		articles = DataManager.sharedManager.languageBasedArticles
+		tableView.reloadData()
+	}
+	
+	func outlineView(outlineView: NSOutlineView, numberOfChildrenOfItem item: AnyObject?) -> Int {
+		if item == nil { return self.articles?.count ?? 0 }
+		else if let item = item as? WikiLanguageArticles {
+			return item.articles.count
+		}
+		return 0
+	}
+	func outlineView(outlineView: NSOutlineView, child index: Int, ofItem item: AnyObject?) -> AnyObject {
+		if let item = item as? WikiLanguageArticles {
+			return item.articles[index]
+		}
+		return articles![index]
+	}
+	func outlineView(outlineView: NSOutlineView, isItemExpandable item: AnyObject) -> Bool {
+		if let item = item as? WikiLanguageArticles { return item.articles.count > 0 }
+		else { return false }
+	}
+	
+	func outlineView(outlineView: NSOutlineView, viewForTableColumn tableColumn: NSTableColumn?, item: AnyObject) -> NSView? {
+		var view: NSTableCellView?
+		var text: String?
+		
+		if let languageArticle = item as? WikiLanguageArticles {
+			if tableColumn?.identifier == "article_name_column" {
+				view = outlineView.makeViewWithIdentifier("article_name_cell", owner: self) as? NSTableCellView
+				text = languageArticle.english_article.articleName
+			}
+		}
+		else if let article = item as? WikiArticle {
+			if tableColumn?.identifier == "id_column" {
+				view = outlineView.makeViewWithIdentifier("id_cell", owner: self) as? NSTableCellView
+				text = article.pageID.description
+			}
+			else if tableColumn?.identifier == "article_name_column" {
+				view = outlineView.makeViewWithIdentifier("article_name_cell", owner: self) as? NSTableCellView
+				text = article.articleName
+			}
+			else if tableColumn?.identifier == "coordinates_column" {
+				view = outlineView.makeViewWithIdentifier("coordinates_cell", owner: self) as? NSTableCellView
+				text = article.coordinates?.description ?? ""
+			}
+		}
+		
+		view?.textField?.stringValue = text ?? ""
+		view?.textField?.sizeToFit()
+		return view
+	}
+
+	
 }
 

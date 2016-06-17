@@ -14,11 +14,7 @@ protocol DataManagerDelegate: class {
 }
 
 class DataManager {
-	
-	init() {
-		
-	}
-	
+
 	let enableLanguageBasedArticles = true
 	var languageBasedArticles = [WikiLanguageArticles]()
 	

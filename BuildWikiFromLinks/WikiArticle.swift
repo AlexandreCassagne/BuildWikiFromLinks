@@ -66,6 +66,7 @@ class WikiArticle: Hashable, CustomStringConvertible, NSCoding {
 	
 	lazy var requestData: NSData = {
 		let d = NSData(contentsOfURL: WikiArticle.soleURLForArticle(self.language, pageID: self.pageID))!
+//		print("Request: \(self.pageID, self.articleName, self.language, NSDate())")
 		return d
 	}()
 	
