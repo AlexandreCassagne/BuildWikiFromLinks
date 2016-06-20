@@ -25,6 +25,13 @@ class WikiArticle: Hashable, CustomStringConvertible, NSCoding {
 		case de = "de"
 		case it = "it"
 		case ru = "ru"
+		case ja = "ja"
+		case sv = "sv"
+		case nl = "nl"
+		case zh = "zh"
+		case pt = "pt"
+		case fa = "fa"
+		case ar = "ar"
 	}
 
 	// --=== Constructors ===--
@@ -37,8 +44,7 @@ class WikiArticle: Hashable, CustomStringConvertible, NSCoding {
 		self.language = language
 		self.pageURL = NSURL(string: validID.url)!
 	}
-
-	init?(string: String) {
+	convenience init?(string: String) {
 		let matcher =  "https:\\/\\/([a-z]{2}).wikipedia.org\\/wiki\\/(.*)"
 		
 		guard let _ = NSURL(string: string)
@@ -51,15 +57,19 @@ class WikiArticle: Hashable, CustomStringConvertible, NSCoding {
 		let r1 = match.rangeAtIndex(2), r2 = match.rangeAtIndex(1)
 		let s1 = NSString(string: string).substringWithRange(r1), s2 = NSString(string: string).substringWithRange(r2)
 		
+		/*
 		self.language = Language(rawValue: s2)!
 		self.articleName = s1
-		
+		*/
+		self.init(articleName: s1, language: Language(rawValue: s2)!)
+
+		/*
 		guard let validID = WikiArticle.validateArticle(self.articleName, language: self.language) else { return nil }
 		self.pageID = validID.id
 		self.articleName = validID.title
 		self.pageURL = NSURL(string: validID.url)!
+*/
 	}
-
 	init(language aLanguage: Language, articleName anArticleName: String, pageID aPageID: Int, url: NSURL) {
 		language = aLanguage
 		articleName = anArticleName
@@ -72,7 +82,6 @@ class WikiArticle: Hashable, CustomStringConvertible, NSCoding {
 	@objc func encodeWithCoder(aCoder: NSCoder) {
 		aCoder.encodeRootObject(self.toDictionary())
 	}
-
 	@objc required init?(coder: NSCoder) {
 		if let dictionary = coder.decodeObject() as? [String: AnyObject] {
 			self.pageID = dictionary["pageID"] as! Int
@@ -92,15 +101,29 @@ class WikiArticle: Hashable, CustomStringConvertible, NSCoding {
 //		print("Request: \(self.pageID, self.articleName, self.language, NSDate())")
 		return d
 	}()
-
+	
+	
+	//MARK : - To and fro dictionary
+	init?(from dictionary: [String: AnyObject]) {
+		language = Language(rawValue: dictionary["language"] as! String)!
+		pageID = dictionary["pageID"] as! Int
+		articleName = dictionary["articleName"] as! String
+		pageURL = NSURL(string: dictionary["pageURL"] as! String)!
+		image = NSURL(string: (dictionary["image"] as? String ?? ""))
+		coordinates = dictionary["coordinates"] as? Coordinates
+		summary = dictionary["summary"] as? String
+		otherLanguages = dictionary["otherLanguages"] as? [String: String]
+	}
 	func toDictionary() -> [String: AnyObject] {
 		var dictionary = [String: AnyObject]()
 		
 		dictionary["language"] = language.rawValue
 		dictionary["pageID"] = pageID
+		dictionary["pageURL"] = pageURL.absoluteString
 		dictionary["coordinates"] = coordinates
 		dictionary["articleName"] = articleName
 		dictionary["summary"] = summary
+		dictionary["image"] = self.image?.absoluteString
 		if let otherLanguages = self.otherLanguages { dictionary["otherLanguages"] = otherLanguages }
 		
 		return dictionary
@@ -114,11 +137,11 @@ class WikiArticle: Hashable, CustomStringConvertible, NSCoding {
 	private static func validateArticle(articleName: String, language: Language) -> (id: Int, title: String, url: String)? {
 		let escapedString =
 			"https://\(language.rawValue).wikipedia.org/w/api.php?action=query&format=json&redirects&titles=\(articleName)&prop=info&inprop=url"
-		let url = NSURL(string: escapedString)!
-//		let contents = try! String(contentsOfURL: url)
-		guard let a = try? NSJSONSerialization.JSONObjectWithData(NSData(contentsOfURL: url)!, options: NSJSONReadingOptions.MutableContainers) as! Dictionary<String, AnyObject>
+		guard let url = NSURL(string: escapedString)
 			else { return nil }
-		guard let pages = ((a["query"]?["pages"])) as? Dictionary<String, AnyObject>
+		guard let a = try? NSJSONSerialization.JSONObjectWithData(NSData(contentsOfURL: url)!, options: NSJSONReadingOptions.MutableContainers) as? Dictionary<String, AnyObject>
+			else { return nil }
+		guard let pages = ((a?["query"]?["pages"])) as? Dictionary<String, AnyObject>
 			else { return nil }
 		guard let pageid = ((pages.first!.1)["pageid"]) as? Int
 			else { return nil}
@@ -180,7 +203,6 @@ class WikiArticle: Hashable, CustomStringConvertible, NSCoding {
 		
 		return ["lat": lat_d, "lon": lon_d]
 	}()
-
 	lazy var image: NSURL? = {
 //		let url = WikiArticle.URLForCommand(self.language, pageID: self.pageID, commands: "prop=pageimages&piprop=name%7Coriginal")
 		
@@ -194,7 +216,6 @@ class WikiArticle: Hashable, CustomStringConvertible, NSCoding {
 		return NSURL(string: imageURL)
 		
 	}()
-
 	lazy var summary: String? = {
 		guard let a = try? NSJSONSerialization.JSONObjectWithData(self.requestData, options: NSJSONReadingOptions.MutableContainers) as! Dictionary<String, AnyObject> else {
 			print("Error loading summary for \(self.articleName, self.language)");

@@ -20,10 +20,24 @@ class DataManager {
 	static let DataManagerReportCompletionNotificationName = "DataManagerReportCompletion"
 
 	// MARK: - Fields
-	let enableLanguageBasedArticles = true
+	private let enableLanguageBasedArticles = true
 	weak var delegate: DataManagerDelegate?
 	
+	func resetLBA(lba: Set<WikiLanguageArticles>) {
+		articles.removeAll()
+		languageBasedArticles = lba
+		
+		for wla in languageBasedArticles {
+			for a in wla.articles {
+				articles.insert(a)
+			}
+		}
+
+		self.delegate?.reportCompletion(self)
+	}
+	
 	var languageBasedArticles = Set<WikiLanguageArticles>()
+	
 	var urls = Set<String>()
 	var articles = Set<WikiArticle>()
 	

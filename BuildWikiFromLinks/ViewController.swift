@@ -15,9 +15,7 @@ class ViewController: NSViewController, NSTextFieldDelegate, DataManagerDelegate
 	@IBOutlet var tableView : NSOutlineView!
 	@IBOutlet var progressIndicator : NSProgressIndicator!
 	
-	var articles: [WikiLanguageArticles]?
-	private var tmp_array: [WikiArticle]? // TODO: Remove this
-	
+	var articles: [WikiLanguageArticles]?	
 
 	// MARK: Time Remaining Fields
 	// Could be removed; not essential.
@@ -39,32 +37,18 @@ class ViewController: NSViewController, NSTextFieldDelegate, DataManagerDelegate
 	
 	// MARK: - DataManagerDelegate
 	func reportCompletion(sender: DataManager) {
-		tmp_array = Array(sender.articles)
-		
-		tmp_array!.sortInPlace { (a, b) -> Bool in
-			let first = a.language.rawValue.compare(b.language.rawValue)
-			if first == NSComparisonResult.OrderedSame {
-				let result = a.articleName.compare(b.articleName)
-				return result == .OrderedAscending
-			}
-			else {
-				return first == .OrderedAscending
-			}
-		}
-		
 		averageTimeInterval = 0
 		lastProgress = nil
 		
-		let interval = -beginDate!.timeIntervalSinceNow
-		let a = dcf.stringFromTimeInterval(interval)
+		if let beginDate = beginDate {
 		
-		timeRemainingLabel.stringValue = "Done! Pulled \(sender.articles.count) articles in \(a ?? "(unknown time)")."
-		
-		beginDate = nil
-		
-		//self.tableView.reloadData()
+			let interval = -beginDate.timeIntervalSinceNow
+			let a = dcf.stringFromTimeInterval(interval)
+			
+			timeRemainingLabel.stringValue = "Done! Pulled \(sender.articles.count) articles in \(a ?? "(unknown time)")."
+		}
 		self.reload()
-		self.writeArray(self.tmp_array!)
+		beginDate = nil
 		print("Done!")
 		
 	}
@@ -103,13 +87,14 @@ class ViewController: NSViewController, NSTextFieldDelegate, DataManagerDelegate
 	
 	
 	// MARK: - Private
-	private func writeArray(array: [WikiArticle]) {
-		var articles = [[String: AnyObject]]()
-		for article in array {
-			articles.append(article.toDictionary())
-		} // TODO: broken
+	private func writeArray() {
+		guard let articles = articles else { return }
+		let array = NSArray(array: articles.map({ (article) -> [String: AnyObject] in
+			return article.toDictionary()
+		}))
+		
+		array.writeToFile(NSHomeDirectory().stringByAppendingString("/Desktop/array.txt"), atomically: true)
 	}
-	
 	
 	private func reload() {
 		articles = Array(DataManager.sharedManager.languageBasedArticles)
@@ -120,6 +105,7 @@ class ViewController: NSViewController, NSTextFieldDelegate, DataManagerDelegate
 		})
 		
 		tableView.reloadData()
+		writeArray()
 	}
 	
 	// MARK: - NSOutlineView Datasource & Delegate

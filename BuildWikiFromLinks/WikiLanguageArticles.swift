@@ -49,6 +49,25 @@ class WikiLanguageArticles: CustomStringConvertible, Hashable, Equatable {
 			}
 		}
 	}
+	
+	// MARK: - Dictionary Value
+	func toDictionary() -> [String: AnyObject] {
+		var dict = [String: AnyObject]()
+		dict["base"] = base_article.toDictionary()
+		dict["articles"] = articles.map { (article) -> [String: AnyObject] in return article.toDictionary() }
+		dict["coordinates"] = self.coordinates
+		dict["languages"] = self.languages.map { (language) -> String in return language.rawValue }
+		
+		return dict
+	}
+	
+	init?(from dictionary: [String: AnyObject]) {
+		base_article = WikiArticle(from: dictionary["base"] as! [String: AnyObject])!
+		articles = (dictionary["articles"] as! [[String: AnyObject]]).map { value -> WikiArticle in
+			return WikiArticle(from: value)!
+		}
+	}
+	
 }
 
 
