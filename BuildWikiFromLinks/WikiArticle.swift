@@ -8,6 +8,7 @@
 
 import Cocoa
 import MapKit
+import SQLite
 
 class WikiArticle: Hashable, CustomStringConvertible, NSCoding {
 	// -== Fields ==-
@@ -18,7 +19,7 @@ class WikiArticle: Hashable, CustomStringConvertible, NSCoding {
 
 	// -== Types ==-
 	typealias Coordinates = [String: NSNumber]
-	enum Language: String {
+	enum Language: String, Value {
 		case fr = "fr"
 		case en = "en"
 		case es = "es"
@@ -32,10 +33,34 @@ class WikiArticle: Hashable, CustomStringConvertible, NSCoding {
 		case pt = "pt"
 		case fa = "fa"
 		case ar = "ar"
+		
+		static let BaseLanguage = Language.fr
+		
+		// Value protocol
+		typealias Datatype = String
+		static var declaredDatatype = String.declaredDatatype
+		static func fromDatatypeValue(datatypeValue: Datatype) -> Language {
+			return Language(rawValue: datatypeValue)!
+		}
+		var datatypeValue: String {
+			return rawValue
+		}
+
 	}
 
 	// --=== Constructors ===--
-
+	
+	init(language: Language, articleName: String, pageID: Int, pageURL: NSURL, coordinates: Coordinates?, otherLanguages: [String: String], image: [NSURL], summary: String?) {
+		self.language = language
+		self.articleName = articleName
+		self.pageID = pageID
+		self.pageURL = pageURL
+		self.coordinates = coordinates
+		self.otherLanguages = otherLanguages
+		self.image = image
+		self.summary = summary
+	}
+	
 	init?(articleName: String, language: Language) {
 		guard let validID = WikiArticle.validateArticle(articleName, language: language)
 			else { return nil }
@@ -90,7 +115,7 @@ class WikiArticle: Hashable, CustomStringConvertible, NSCoding {
 			self.pageURL = dictionary["fullURL"] as! NSURL
 			self.coordinates = dictionary["coordinates"] as? Coordinates
 			self.summary = dictionary["summary"] as? String
-			self.otherLanguages = dictionary["otherLanguages"] as? [String: String]
+			self.otherLanguages = dictionary["otherLanguages"] as! [String: String]
 		} else {
 			return nil
 		}
@@ -109,22 +134,21 @@ class WikiArticle: Hashable, CustomStringConvertible, NSCoding {
 		pageID = dictionary["pageID"] as! Int
 		articleName = dictionary["articleName"] as! String
 		pageURL = NSURL(string: dictionary["pageURL"] as! String)!
-		image = NSURL(string: (dictionary["image"] as? String ?? ""))
+		image = dictionary["image"] as? [NSURL] ?? []
 		coordinates = dictionary["coordinates"] as? Coordinates
 		summary = dictionary["summary"] as? String
-		otherLanguages = dictionary["otherLanguages"] as? [String: String]
+		otherLanguages = dictionary["otherLanguages"] as! [String: String]
 	}
 	func toDictionary() -> [String: AnyObject] {
 		var dictionary = [String: AnyObject]()
-		
 		dictionary["language"] = language.rawValue
 		dictionary["pageID"] = pageID
 		dictionary["pageURL"] = pageURL.absoluteString
 		dictionary["coordinates"] = coordinates
 		dictionary["articleName"] = articleName
 		dictionary["summary"] = summary
-		dictionary["image"] = self.image?.absoluteString
-		if let otherLanguages = self.otherLanguages { dictionary["otherLanguages"] = otherLanguages }
+		dictionary["image"] = self.image
+		dictionary["otherLanguages"] = otherLanguages
 		
 		return dictionary
 	}
@@ -161,15 +185,15 @@ class WikiArticle: Hashable, CustomStringConvertible, NSCoding {
 		_ = self.otherLanguages
 	}
 
-	lazy var otherLanguages: [String: String]? = {
+	lazy var otherLanguages: [String: String] = {
 		guard let a = try? NSJSONSerialization.JSONObjectWithData(self.requestData, options: NSJSONReadingOptions.MutableContainers) as! Dictionary<String, AnyObject> else {
 			print("Error loading language links for \(self.articleName, self.language)");
-			return nil
+			return [:]
 		}
 		
-		guard let pages = a["query"]?["pages"] as? [String: AnyObject] else { return nil }
-		guard let item = pages["\(self.pageID)"] as? [String: AnyObject] else { return nil }
-		guard let langLinks = item["langlinks"] as? [[String: String]] else { return nil }
+		guard let pages = a["query"]?["pages"] as? [String: AnyObject] else { return [:] }
+		guard let item = pages["\(self.pageID)"] as? [String: AnyObject] else { return [:] }
+		guard let langLinks = item["langlinks"] as? [[String: String]] else { return [:] }
 		
 		var ret = [String: String]()
 		
@@ -203,17 +227,15 @@ class WikiArticle: Hashable, CustomStringConvertible, NSCoding {
 		
 		return ["lat": lat_d, "lon": lon_d]
 	}()
-	lazy var image: NSURL? = {
-//		let url = WikiArticle.URLForCommand(self.language, pageID: self.pageID, commands: "prop=pageimages&piprop=name%7Coriginal")
-		
+	lazy var image: [NSURL] = {
 		let a = try! NSJSONSerialization.JSONObjectWithData(self.requestData, options: NSJSONReadingOptions.MutableContainers) as! Dictionary<String, AnyObject>
 		
 		
 		guard let pages = ((a["query"]?["pages"])) as? Dictionary<String, AnyObject>
-			else { return nil }
+			else { return [] }
 		guard let imageURL = (pages.first!.1)["thumbnail"]??["original"]! as? String
-			else { return nil }
-		return NSURL(string: imageURL)
+			else { return [] }
+		return [NSURL(string: imageURL)!]
 		
 	}()
 	lazy var summary: String? = {

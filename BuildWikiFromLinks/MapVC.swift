@@ -57,7 +57,6 @@ class MapVC: NSViewController, MKMapViewDelegate {
 		theButton.action = #selector(showDetail)
 		
 		view.rightCalloutAccessoryView = theButton
-		
 		return view
 	}
 	
@@ -81,5 +80,7 @@ class MapVC: NSViewController, MKMapViewDelegate {
 	}
 	override func viewDidLoad() {
 		super.viewDidLoad()
+		
+		self.addArticles(DataManager.sharedManager.languageBasedArticles)
 	}
 }

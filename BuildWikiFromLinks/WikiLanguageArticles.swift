@@ -8,12 +8,11 @@
 
 import Cocoa
 
-
-
 class WikiLanguageArticles: CustomStringConvertible, Hashable, Equatable {
 	// MARK: Fields
 	let base_article : WikiArticle
 	var articles = [WikiArticle]()
+	
 	var languages: [WikiArticle.Language] {
 		return articles.map {
 			article -> WikiArticle.Language in
@@ -37,13 +36,17 @@ class WikiLanguageArticles: CustomStringConvertible, Hashable, Equatable {
 		return articles.description
 	}
 	
+	init(dictionary: [WikiArticle.Language : WikiArticle], base: WikiArticle.Language) {
+		self.base_article = dictionary[base]!
+		articles = Array(dictionary.values)
+	}
+	
 	// MARK: - Constructors
-	init?(baseArticle: WikiArticle) {
+	init(baseArticle: WikiArticle) {
 		self.articles.append(baseArticle)
 		self.base_article = baseArticle
 		
-		guard let langLinks = baseArticle.otherLanguages else { return }
-		for langLink in langLinks {
+		for langLink in baseArticle.otherLanguages {
 			if let localized = DataManager.sharedManager.lookup(langLink.1) {
 				self.articles.append(localized)
 			}
@@ -67,9 +70,7 @@ class WikiLanguageArticles: CustomStringConvertible, Hashable, Equatable {
 			return WikiArticle(from: value)!
 		}
 	}
-	
 }
-
 
 // MARK: Equatable
 func ==(lhs: WikiLanguageArticles, rhs: WikiLanguageArticles) -> Bool {

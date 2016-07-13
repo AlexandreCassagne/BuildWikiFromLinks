@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		06E50A2F7904A79151AAB09D /* Pods_BuildWikiFromLinks.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4AD14D40670CEF201BAEB65A /* Pods_BuildWikiFromLinks.framework */; };
 		AC1CF1FD1D1157D1007A3B40 /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AC1CF1FC1D1157D1007A3B40 /* MapKit.framework */; };
 		AC1CF1FF1D115829007A3B40 /* DataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC1CF1FE1D115829007A3B40 /* DataManager.swift */; };
 		AC1CF2011D118873007A3B40 /* DetailVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC1CF2001D118873007A3B40 /* DetailVC.swift */; };
@@ -23,6 +24,9 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		2C924DD9F5DE1C1DCAFF0C5E /* Pods-BuildWikiFromLinks.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BuildWikiFromLinks.release.xcconfig"; path = "Pods/Target Support Files/Pods-BuildWikiFromLinks/Pods-BuildWikiFromLinks.release.xcconfig"; sourceTree = "<group>"; };
+		4AD14D40670CEF201BAEB65A /* Pods_BuildWikiFromLinks.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_BuildWikiFromLinks.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		91A1EA0023693C29DC042897 /* Pods-BuildWikiFromLinks.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BuildWikiFromLinks.debug.xcconfig"; path = "Pods/Target Support Files/Pods-BuildWikiFromLinks/Pods-BuildWikiFromLinks.debug.xcconfig"; sourceTree = "<group>"; };
 		AC1CF1FC1D1157D1007A3B40 /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
 		AC1CF1FE1D115829007A3B40 /* DataManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DataManager.swift; sourceTree = "<group>"; };
 		AC1CF2001D118873007A3B40 /* DetailVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DetailVC.swift; sourceTree = "<group>"; };
@@ -47,6 +51,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				AC1CF1FD1D1157D1007A3B40 /* MapKit.framework in Frameworks */,
+				06E50A2F7904A79151AAB09D /* Pods_BuildWikiFromLinks.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -97,6 +102,7 @@
 			isa = PBXGroup;
 			children = (
 				AC1CF1FC1D1157D1007A3B40 /* MapKit.framework */,
+				4AD14D40670CEF201BAEB65A /* Pods_BuildWikiFromLinks.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -107,6 +113,7 @@
 				ACC075C11D1434FE00BF70E3 /* Frameworks */,
 				ACEC7F8D1D0EDAC400379B25 /* BuildWikiFromLinks */,
 				ACEC7F8C1D0EDAC400379B25 /* Products */,
+				F0E06E1727C4934B880998E5 /* Pods */,
 			);
 			sourceTree = "<group>";
 		};
@@ -131,6 +138,15 @@
 			path = BuildWikiFromLinks;
 			sourceTree = "<group>";
 		};
+		F0E06E1727C4934B880998E5 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				91A1EA0023693C29DC042897 /* Pods-BuildWikiFromLinks.debug.xcconfig */,
+				2C924DD9F5DE1C1DCAFF0C5E /* Pods-BuildWikiFromLinks.release.xcconfig */,
+			);
+			name = Pods;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -138,9 +154,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = ACEC7F9A1D0EDAC400379B25 /* Build configuration list for PBXNativeTarget "BuildWikiFromLinks" */;
 			buildPhases = (
+				6E0838E5280C9312F9FCFB15 /* [CP] Check Pods Manifest.lock */,
 				ACEC7F871D0EDAC400379B25 /* Sources */,
 				ACEC7F881D0EDAC400379B25 /* Frameworks */,
 				ACEC7F891D0EDAC400379B25 /* Resources */,
+				2253008E0C0FC58B790F6D52 /* [CP] Embed Pods Frameworks */,
+				12D7F0B69E6C921AA80B4EF8 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -196,6 +215,54 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		12D7F0B69E6C921AA80B4EF8 /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-BuildWikiFromLinks/Pods-BuildWikiFromLinks-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		2253008E0C0FC58B790F6D52 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-BuildWikiFromLinks/Pods-BuildWikiFromLinks-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		6E0838E5280C9312F9FCFB15 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		ACEC7F871D0EDAC400379B25 /* Sources */ = {
@@ -312,9 +379,14 @@
 		};
 		ACEC7F9B1D0EDAC400379B25 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 91A1EA0023693C29DC042897 /* Pods-BuildWikiFromLinks.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				COMBINE_HIDPI_IMAGES = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)",
+				);
 				INFOPLIST_FILE = BuildWikiFromLinks/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = co.cassagne.BuildWikiFromLinks;
@@ -324,9 +396,14 @@
 		};
 		ACEC7F9C1D0EDAC400379B25 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 2C924DD9F5DE1C1DCAFF0C5E /* Pods-BuildWikiFromLinks.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				COMBINE_HIDPI_IMAGES = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)",
+				);
 				INFOPLIST_FILE = BuildWikiFromLinks/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = co.cassagne.BuildWikiFromLinks;

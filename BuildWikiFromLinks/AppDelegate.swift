@@ -11,24 +11,6 @@ import Cocoa
 @NSApplicationMain
 
 class AppDelegate: NSObject, NSApplicationDelegate {
-	@IBAction func openDocument(sender: AnyObject) {
-		let op = NSOpenPanel()
-		op.allowsMultipleSelection = false
-		if (op.runModal() == NSModalResponseOK) {
-			let url = op.URL!
-			let array = NSArray(contentsOfURL: url)!
-			
-			var items = [WikiLanguageArticles]()
-			
-			for item in array {
-				items.append(WikiLanguageArticles(from: item as! [String: AnyObject])!)
-			}
-			DataManager.sharedManager.resetLBA(Set(items))
-
-		}
-		
-	}
-
 	
 	func applicationDidFinishLaunching(aNotification: NSNotification) {
 		// Insert code here to initialize your application

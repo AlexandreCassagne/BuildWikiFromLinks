@@ -7,6 +7,7 @@
 //
 
 import Cocoa
+import SQLite
 
 class ViewController: NSViewController, NSTextFieldDelegate, DataManagerDelegate {
 	
@@ -15,8 +16,8 @@ class ViewController: NSViewController, NSTextFieldDelegate, DataManagerDelegate
 	@IBOutlet var tableView : NSOutlineView!
 	@IBOutlet var progressIndicator : NSProgressIndicator!
 	
-	var articles: [WikiLanguageArticles]?	
-
+	var articles: [WikiLanguageArticles]?
+	
 	// MARK: Time Remaining Fields
 	// Could be removed; not essential.
 	private var beginDate: NSDate?
@@ -34,19 +35,12 @@ class ViewController: NSViewController, NSTextFieldDelegate, DataManagerDelegate
 		return dcf
 	}() // Date formatter for
 	
-	
 	// MARK: - DataManagerDelegate
 	func reportCompletion(sender: DataManager) {
 		averageTimeInterval = 0
 		lastProgress = nil
-		
-		if let beginDate = beginDate {
-		
-			let interval = -beginDate.timeIntervalSinceNow
-			let a = dcf.stringFromTimeInterval(interval)
-			
-			timeRemainingLabel.stringValue = "Done! Pulled \(sender.articles.count) articles in \(a ?? "(unknown time)")."
-		}
+		timeRemainingLabel.stringValue = "Done!"
+
 		self.reload()
 		beginDate = nil
 		print("Done!")
@@ -147,7 +141,7 @@ class ViewController: NSViewController, NSTextFieldDelegate, DataManagerDelegate
 				}
 			}
 		}
-			
+		
 		else if let article = item as? WikiArticle {
 			if tableColumn?.identifier == "id_column" {
 				view = outlineView.makeViewWithIdentifier("id_cell", owner: self) as? NSTableCellView
@@ -174,8 +168,10 @@ class ViewController: NSViewController, NSTextFieldDelegate, DataManagerDelegate
 	// MARK: NSViewController Overrides
 	override func viewDidLoad() {
 		super.viewDidLoad()
-		DataManager.sharedManager.delegate = self
 		progressIndicator.maxValue = 1.0
+		
+		DataManager.sharedManager.delegate = self
+		self.reload()
 	}
 
 }

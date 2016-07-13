@@ -26,7 +26,7 @@ class DetailVC: NSViewController {
 			let queue = NSOperationQueue()
 			queue.qualityOfService = .UserInitiated
 			queue.addOperationWithBlock {
-				guard let imageURL = self.selectedArticle?.image else {return}
+				guard let imageURL = self.selectedArticle?.image.first else {return}
 				guard let data = NSData(contentsOfURL: imageURL) else { return }
 				guard let image = NSImage(data: data) else { return }
 				
